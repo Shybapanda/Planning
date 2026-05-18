@@ -109,7 +109,7 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
 <div id="loginScreen">
   <span class="login-emoji">💌</span>
   <div class="login-title">Mes Livraisons</div>
-  <div class="login-sub">Pour toi, ma femme ✨</div>
+  <div class="login-sub">Pour toi, ma chérie ✨</div>
   <div class="login-card">
     <label class="login-label">Code secret 🔑</label>
     <input class="code-input" id="codeInput" type="password" inputmode="numeric"
@@ -131,7 +131,7 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
     </div>
     <span class="header-emoji">🚗</span>
     <h1>Mes Livraisons <span>du Jour</span></h1>
-    <p class="header-sub">Pour que tu saches où je suis, ma femme 💌</p>
+    <p class="header-sub">Pour que tu saches où je suis, ma chérie 💌</p>
     <div class="deco-line"><span class="deco-diamond">◆</span></div>
   </div>
   <div class="sync-bar">
@@ -156,60 +156,178 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
 
 <!-- ══ TOUT EN UN SEUL SCRIPT ══ -->
 <script>
-// ── FEUX D'ARTIFICE (script classique, pas de module) ──
+// ── FEUX D'ARTIFICE + FLEURS + COEURS + VAGUES ──
 (function(){
-  const canvas=document.getElementById('fw'),ctx=canvas.getContext('2d');
-  let on=true;
+  var canvas=document.getElementById('fw'),ctx=canvas.getContext('2d');
+  var on=true;
   window._stopFw=function(){on=false;ctx.clearRect(0,0,canvas.width,canvas.height);};
   function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
   resize();window.addEventListener('resize',resize);
-  const C=['#f4a7b9','#e8758a','#d4a843','#f0d080','#c9829a','#ff85a1','#ffd700','#ff69b4','#ffb347','#ee82ee'];
-  const parts=[],rocks=[];let nxt=0;
-  function Petal(x,y,c){
+
+  var C=['#f4a7b9','#e8758a','#d4a843','#f0d080','#c9829a','#ff85a1','#ffd700','#ff69b4','#ffb347','#ee82ee','#fff0f5','#ff4d6d'];
+  var parts=[],rocks=[],waves=[],floaters=[];
+  var nxt=0,t=0;
+
+  // ── Particule : fleur ──
+  function Flower(x,y,c){
     this.x=x;this.y=y;this.c=c;
-    var a=Math.random()*Math.PI*2,s=2+Math.random()*5;
+    var a=Math.random()*Math.PI*2,s=1.5+Math.random()*5;
     this.vx=Math.cos(a)*s;this.vy=Math.sin(a)*s;
-    this.a=1;this.d=0.011+Math.random()*0.011;
-    this.sz=3+Math.random()*4;this.np=5+Math.floor(Math.random()*4);
-    this.r=Math.random()*Math.PI*2;this.rv=(Math.random()-.5)*0.12;this.g=0.055;
+    this.al=1;this.d=0.010+Math.random()*0.010;
+    this.sz=3+Math.random()*5;this.np=5+Math.floor(Math.random()*4);
+    this.r=Math.random()*Math.PI*2;this.rv=(Math.random()-.5)*0.12;this.g=0.05;
   }
-  Petal.prototype.tick=function(){this.vx*=0.98;this.vy=this.vy*0.98+this.g;this.x+=this.vx;this.y+=this.vy;this.r+=this.rv;this.a-=this.d;};
-  Petal.prototype.draw=function(){
-    if(this.a<=0)return;
-    ctx.save();ctx.globalAlpha=this.a;ctx.translate(this.x,this.y);ctx.rotate(this.r);
+  Flower.prototype.tick=function(){this.vx*=0.98;this.vy=this.vy*0.98+this.g;this.x+=this.vx;this.y+=this.vy;this.r+=this.rv;this.al-=this.d;};
+  Flower.prototype.draw=function(){
+    if(this.al<=0)return;
+    ctx.save();ctx.globalAlpha=this.al;ctx.translate(this.x,this.y);ctx.rotate(this.r);
     ctx.beginPath();
-    for(var i=0;i<this.np;i++){var a=(i/this.np)*Math.PI*2,a2=((i+.5)/this.np)*Math.PI*2;ctx.lineTo(Math.cos(a)*this.sz,Math.sin(a)*this.sz);ctx.lineTo(Math.cos(a2)*this.sz*.4,Math.sin(a2)*this.sz*.4);}
-    ctx.closePath();ctx.fillStyle=this.c;ctx.shadowColor=this.c;ctx.shadowBlur=10;ctx.fill();ctx.restore();
+    for(var i=0;i<this.np;i++){
+      var a=(i/this.np)*Math.PI*2,a2=((i+0.5)/this.np)*Math.PI*2;
+      ctx.lineTo(Math.cos(a)*this.sz,Math.sin(a)*this.sz);
+      ctx.lineTo(Math.cos(a2)*this.sz*0.35,Math.sin(a2)*this.sz*0.35);
+    }
+    ctx.closePath();ctx.fillStyle=this.c;ctx.shadowColor=this.c;ctx.shadowBlur=12;ctx.fill();
+    // centre
+    ctx.beginPath();ctx.arc(0,0,this.sz*0.25,0,Math.PI*2);ctx.fillStyle='#fff';ctx.shadowBlur=4;ctx.fill();
+    ctx.restore();
   };
-  Petal.prototype.dead=function(){return this.a<=0;};
+  Flower.prototype.dead=function(){return this.al<=0;};
+
+  // ── Particule : coeur ──
+  function Heart(x,y,c){
+    this.x=x;this.y=y;this.c=c;
+    var a=Math.random()*Math.PI*2,s=1.5+Math.random()*4.5;
+    this.vx=Math.cos(a)*s;this.vy=Math.sin(a)*s;
+    this.al=1;this.d=0.009+Math.random()*0.009;
+    this.sz=4+Math.random()*5;
+    this.r=Math.random()*Math.PI*2;this.rv=(Math.random()-.5)*0.08;this.g=0.04;
+  }
+  Heart.prototype.tick=function(){this.vx*=0.98;this.vy=this.vy*0.98+this.g;this.x+=this.vx;this.y+=this.vy;this.r+=this.rv;this.al-=this.d;};
+  Heart.prototype.draw=function(){
+    if(this.al<=0)return;
+    ctx.save();ctx.globalAlpha=this.al;ctx.translate(this.x,this.y);ctx.rotate(this.r);
+    var s=this.sz;
+    ctx.beginPath();
+    ctx.moveTo(0,s*0.3);
+    ctx.bezierCurveTo(s*0.8,-s*0.5, s*1.6,s*0.5, 0,s*1.4);
+    ctx.bezierCurveTo(-s*1.6,s*0.5, -s*0.8,-s*0.5, 0,s*0.3);
+    ctx.closePath();
+    ctx.fillStyle=this.c;ctx.shadowColor=this.c;ctx.shadowBlur=14;ctx.fill();
+    ctx.restore();
+  };
+  Heart.prototype.dead=function(){return this.al<=0;};
+
+  // ── Fusée ──
   function Rocket(){
-    this.x=canvas.width*(0.15+Math.random()*0.7);this.y=canvas.height;
-    var tx=canvas.width*(0.1+Math.random()*0.8),ty=canvas.height*(0.1+Math.random()*0.45);
+    this.x=canvas.width*(0.1+Math.random()*0.8);this.y=canvas.height;
+    var tx=canvas.width*(0.1+Math.random()*0.8),ty=canvas.height*(0.08+Math.random()*0.45);
     var dx=tx-this.x,dy=ty-this.y,d=Math.sqrt(dx*dx+dy*dy),s=8+Math.random()*6;
     this.vx=(dx/d)*s;this.vy=(dy/d)*s;this.tx=tx;this.ty=ty;
     this.c=C[Math.floor(Math.random()*C.length)];this.trail=[];this.done=false;
   }
   Rocket.prototype.tick=function(){
-    this.trail.push({x:this.x,y:this.y});if(this.trail.length>12)this.trail.shift();
+    this.trail.push({x:this.x,y:this.y});if(this.trail.length>14)this.trail.shift();
     this.x+=this.vx;this.y+=this.vy;
     var dx=this.tx-this.x,dy=this.ty-this.y;
     if(dx*dx+dy*dy<400){this.explode();this.done=true;}
   };
   Rocket.prototype.explode=function(){
-    var n=60+Math.floor(Math.random()*50),c1=C[Math.floor(Math.random()*C.length)],c2=C[Math.floor(Math.random()*C.length)];
-    for(var i=0;i<n;i++)parts.push(new Petal(this.x,this.y,i%2===0?c1:c2));
+    var n=50+Math.floor(Math.random()*40);
+    var c1=C[Math.floor(Math.random()*C.length)],c2=C[Math.floor(Math.random()*C.length)];
+    var useHeart=Math.random()<0.4; // 40% chance coeur
+    for(var i=0;i<n;i++){
+      if(useHeart && i<n*0.5) parts.push(new Heart(this.x,this.y,i%2===0?c1:c2));
+      else parts.push(new Flower(this.x,this.y,i%2===0?c1:c2));
+    }
   };
   Rocket.prototype.draw=function(){
-    this.trail.forEach(function(t,i,arr){ctx.globalAlpha=(i/arr.length)*0.6;ctx.beginPath();ctx.arc(t.x,t.y,2,0,Math.PI*2);ctx.fillStyle=this.c;ctx.fill();},this);
-    ctx.globalAlpha=1;ctx.beginPath();ctx.arc(this.x,this.y,3,0,Math.PI*2);ctx.fillStyle='#fff';ctx.shadowColor=this.c;ctx.shadowBlur=12;ctx.fill();ctx.shadowBlur=0;
+    for(var i=0;i<this.trail.length;i++){
+      ctx.globalAlpha=(i/this.trail.length)*0.55;
+      ctx.beginPath();ctx.arc(this.trail[i].x,this.trail[i].y,2,0,Math.PI*2);
+      ctx.fillStyle=this.c;ctx.fill();
+    }
+    ctx.globalAlpha=1;ctx.beginPath();ctx.arc(this.x,this.y,3,0,Math.PI*2);
+    ctx.fillStyle='#fff';ctx.shadowColor=this.c;ctx.shadowBlur=14;ctx.fill();ctx.shadowBlur=0;
   };
+
+  // ── Vagues scintillantes en bas ──
+  function drawWaves(t){
+    var W=canvas.width,H=canvas.height;
+    for(var w=0;w<3;w++){
+      ctx.save();
+      ctx.globalAlpha=0.07+w*0.04;
+      ctx.beginPath();
+      ctx.moveTo(0,H);
+      for(var x=0;x<=W;x+=4){
+        var y=H-(18+w*12)*Math.sin((x/W)*Math.PI*3+t*0.6+w*1.2)-(8+w*6)*Math.sin((x/W)*Math.PI*5-t*0.9+w);
+        ctx.lineTo(x,y);
+      }
+      ctx.lineTo(W,H);ctx.closePath();
+      var grad=ctx.createLinearGradient(0,H-60,0,H);
+      var wc=w===0?'#f4a7b9':w===1?'#e8758a':'#d4a843';
+      grad.addColorStop(0,wc);grad.addColorStop(1,'transparent');
+      ctx.fillStyle=grad;ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  // ── Fleurs flottantes décoratives en fond ──
+  function Floater(){
+    this.x=Math.random()*canvas.width;
+    this.y=canvas.height+20;
+    this.sz=3+Math.random()*6;
+    this.np=5+Math.floor(Math.random()*3);
+    this.c=C[Math.floor(Math.random()*C.length)];
+    this.vx=(Math.random()-0.5)*0.4;
+    this.vy=-(0.4+Math.random()*0.8);
+    this.r=Math.random()*Math.PI*2;
+    this.rv=(Math.random()-0.5)*0.02;
+    this.al=0;this.fadeIn=true;
+  }
+  Floater.prototype.tick=function(){
+    this.x+=this.vx;this.y+=this.vy;this.r+=this.rv;
+    if(this.fadeIn){this.al+=0.015;if(this.al>=0.6)this.fadeIn=false;}
+    else{this.al-=0.004;}
+  };
+  Floater.prototype.draw=function(){
+    if(this.al<=0)return;
+    ctx.save();ctx.globalAlpha=this.al;ctx.translate(this.x,this.y);ctx.rotate(this.r);
+    ctx.beginPath();
+    for(var i=0;i<this.np;i++){
+      var a=(i/this.np)*Math.PI*2,a2=((i+0.5)/this.np)*Math.PI*2;
+      ctx.lineTo(Math.cos(a)*this.sz,Math.sin(a)*this.sz);
+      ctx.lineTo(Math.cos(a2)*this.sz*0.35,Math.sin(a2)*this.sz*0.35);
+    }
+    ctx.closePath();ctx.fillStyle=this.c;ctx.shadowColor=this.c;ctx.shadowBlur=8;ctx.fill();
+    ctx.restore();
+  };
+  Floater.prototype.dead=function(){return this.al<=0&&!this.fadeIn;};
+
+  var nextFloater=0;
+
   function loop(ts){
     if(!on)return;
     requestAnimationFrame(loop);
-    ctx.fillStyle='rgba(26,10,18,0.20)';ctx.fillRect(0,0,canvas.width,canvas.height);
-    if(ts>nxt){rocks.push(new Rocket());nxt=ts+400+Math.random()*500;}
+    t+=0.016;
+
+    // Fond sombre semi-transparent
+    ctx.fillStyle='rgba(22,8,16,0.18)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    // Vagues scintillantes
+    drawWaves(t);
+
+    // Fusées
+    if(ts>nxt){rocks.push(new Rocket());nxt=ts+450+Math.random()*550;}
     for(var i=rocks.length-1;i>=0;i--){rocks[i].tick();rocks[i].draw();if(rocks[i].done)rocks.splice(i,1);}
+
+    // Particules explosions
     for(var j=parts.length-1;j>=0;j--){parts[j].tick();parts[j].draw();if(parts[j].dead())parts.splice(j,1);}
+
+    // Fleurs flottantes
+    if(ts>nextFloater){floaters.push(new Floater());nextFloater=ts+300+Math.random()*400;}
+    for(var k=floaters.length-1;k>=0;k--){floaters[k].tick();floaters[k].draw();if(floaters[k].dead())floaters.splice(k,1);}
   }
   requestAnimationFrame(loop);
 })();
