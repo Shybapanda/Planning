@@ -58,6 +58,24 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
 .msg-card-date{font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--mauve);margin-bottom:14px;}
 .msg-card-text{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--dark);line-height:1.6;font-style:italic;margin-bottom:20px;}
 .msg-card-close{background:linear-gradient(135deg,var(--rose),var(--mauve));border:none;border-radius:30px;color:white;padding:10px 28px;font-family:'Playfair Display',serif;font-size:0.9rem;cursor:pointer;-webkit-appearance:none;}
+.rb-btn{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #4fc3f7;border-radius:20px;padding:6px 12px;font-size:0.72rem;color:#4fc3f7;cursor:pointer;font-weight:700;letter-spacing:0.5px;-webkit-appearance:none;white-space:nowrap;box-shadow:0 2px 10px rgba(79,195,247,0.3);}
+.rb-btn:active{opacity:0.8;}
+/* CARNET REDBULL */
+.rb-overlay{position:fixed;inset:0;z-index:9001;background:rgba(10,5,20,0.92);backdrop-filter:blur(6px);display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.rb-overlay.open{opacity:1;pointer-events:all;}
+.rb-header{background:linear-gradient(135deg,#1a1a2e,#0d0d1a);padding:20px 20px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(79,195,247,0.2);}
+.rb-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:#4fc3f7;display:flex;align-items:center;gap:10px;}
+.rb-title span{font-size:1.4rem;}
+.rb-close{background:rgba(79,195,247,0.1);border:1px solid rgba(79,195,247,0.3);border-radius:20px;color:#4fc3f7;padding:6px 16px;font-size:0.8rem;cursor:pointer;-webkit-appearance:none;}
+.rb-body{flex:1;display:flex;flex-direction:column;padding:16px;gap:12px;overflow:hidden;}
+.rb-textarea{flex:1;background:rgba(255,255,255,0.04);border:1.5px solid rgba(79,195,247,0.2);border-radius:16px;padding:16px;color:#e8f4f8;font-family:'Lato',sans-serif;font-size:0.95rem;line-height:1.7;resize:none;outline:none;-webkit-appearance:none;}
+.rb-textarea:focus{border-color:rgba(79,195,247,0.5);}
+.rb-textarea::placeholder{color:rgba(255,255,255,0.2);font-style:italic;}
+.rb-actions{display:flex;gap:10px;align-items:center;}
+.rb-save{flex:1;background:linear-gradient(135deg,#4fc3f7,#0288d1);border:none;border-radius:24px;color:white;padding:13px;font-family:'Playfair Display',serif;font-size:0.95rem;cursor:pointer;-webkit-appearance:none;box-shadow:0 3px 12px rgba(79,195,247,0.3);}
+.rb-save:active{opacity:0.85;}
+.rb-saved-msg{font-size:0.75rem;color:#4fc3f7;font-style:italic;opacity:0;transition:opacity 0.3s;}
+.rb-saved-msg.show{opacity:1;}
 .sync-bar{background:white;border-bottom:1px solid var(--border);padding:8px 20px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:0.78rem;color:var(--grey);}
 .sync-dot{width:8px;height:8px;border-radius:50%;background:#ccc;transition:background 0.4s;flex-shrink:0;}
 .sync-dot.connected{background:#4caf50;}.sync-dot.syncing{background:var(--gold);animation:pdot 1s infinite;}.sync-dot.error{background:#e74c3c;}
@@ -120,7 +138,7 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
 <div id="loginScreen">
   <span class="login-emoji">💌</span>
   <div class="login-title">Mes Livraisons</div>
-  <div class="login-sub">Pour toi, ma chérie ✨</div>
+  <div class="login-sub">Pour toi, ma femme ✨</div>
   <div class="login-card">
     <label class="login-label">Code secret 🔑</label>
     <input class="code-input" id="codeInput" type="password" inputmode="numeric"
@@ -139,11 +157,12 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
   <div class="header">
     <div class="header-actions">
       <button class="gift-btn" id="giftBtn">🎁</button>
+      <button class="rb-btn" id="rbBtn">🐂 RedBull</button>
       <button class="logout-btn" id="logoutBtn">🔒 Verrouiller</button>
     </div>
     <span class="header-emoji">🚗</span>
     <h1>Mes Livraisons <span>du Jour</span></h1>
-    <p class="header-sub">Pour que tu saches où je suis, ma chérie 💌</p>
+    <p class="header-sub">Pour que tu saches où je suis, ma femme 💌</p>
     <div class="deco-line"><span class="deco-diamond">◆</span></div>
   </div>
   <div class="sync-bar">
@@ -171,6 +190,20 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
     <div class="msg-card-date" id="msgDate"></div>
     <div class="msg-card-text" id="msgText"></div>
     <button class="msg-card-close" id="msgClose">Merci 💌</button>
+  </div>
+</div>
+
+<div class="rb-overlay" id="rbOverlay">
+  <div class="rb-header">
+    <div class="rb-title"><span>🐂</span> Mon Carnet RedBull</div>
+    <button class="rb-close" id="rbClose">✕ Fermer</button>
+  </div>
+  <div class="rb-body">
+    <textarea class="rb-textarea" id="rbTextarea" placeholder="Écris tout ce que tu veux ici… notes, idées, listes, pensées du jour… 🐂✨"></textarea>
+    <div class="rb-actions">
+      <button class="rb-save" id="rbSave">💾 Sauvegarder</button>
+      <span class="rb-saved-msg" id="rbSavedMsg">Sauvegardé ✓</span>
+    </div>
   </div>
 </div>
 
@@ -860,6 +893,45 @@ document.getElementById('msgClose').addEventListener('click', function(){
 document.getElementById('msgOverlay').addEventListener('click', function(e){
   if(e.target===this) this.classList.remove('open');
 });
+
+/* CARNET REDBULL */
+var RB_KEY = 'rb_carnet';
+
+function initRbCarnet(){
+  var rbBtn=document.getElementById('rbBtn');
+  var rbOverlay=document.getElementById('rbOverlay');
+  var rbClose=document.getElementById('rbClose');
+  var rbSave=document.getElementById('rbSave');
+  var rbTextarea=document.getElementById('rbTextarea');
+  var rbSavedMsg=document.getElementById('rbSavedMsg');
+  if(!rbBtn||!rbOverlay) return;
+
+  rbBtn.addEventListener('click', function(){
+    rbTextarea.value = localStorage.getItem(RB_KEY) || '';
+    rbOverlay.classList.add('open');
+    setTimeout(function(){ rbTextarea.focus(); }, 200);
+  });
+  rbClose.addEventListener('click', function(){
+    rbOverlay.classList.remove('open');
+  });
+  rbOverlay.addEventListener('click', function(e){
+    if(e.target===this) this.classList.remove('open');
+  });
+  rbSave.addEventListener('click', function(){
+    localStorage.setItem(RB_KEY, rbTextarea.value);
+    rbSavedMsg.classList.add('show');
+    setTimeout(function(){ rbSavedMsg.classList.remove('show'); }, 2000);
+  });
+  setInterval(function(){
+    if(rbOverlay.classList.contains('open')){
+      localStorage.setItem(RB_KEY, rbTextarea.value);
+    }
+  }, 5000);
+}
+
+/* Appel apres chargement complet */
+window.addEventListener('DOMContentLoaded', function(){ initRbCarnet(); });
 </script>
+
 </body>
 </html>
