@@ -497,6 +497,17 @@ function render(){
   }
 }
 let tt;function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2200);}
+
+/* REDBULL CARNET — sync Firebase */
+const rbRef=ref(db,'redbull_carnet');
+onValue(rbRef,snap=>{
+  const val=snap.val()||'';
+  const ta=document.getElementById('rbTextarea');
+  if(ta&&document.activeElement!==ta) ta.value=val;
+});
+window._rbSaveToFb=async function(txt){
+  try{ await set(rbRef,txt); } catch(e){ console.warn('rb save err',e); }
+};
 `;
   document.head.appendChild(s);
 }
@@ -895,8 +906,6 @@ document.getElementById('msgOverlay').addEventListener('click', function(e){
 });
 
 /* CARNET REDBULL */
-var RB_KEY = 'rb_carnet';
-
 function initRbCarnet(){
   var rbBtn=document.getElementById('rbBtn');
   var rbOverlay=document.getElementById('rbOverlay');
@@ -907,7 +916,6 @@ function initRbCarnet(){
   if(!rbBtn||!rbOverlay) return;
 
   rbBtn.addEventListener('click', function(){
-    rbTextarea.value = localStorage.getItem(RB_KEY) || '';
     rbOverlay.classList.add('open');
     setTimeout(function(){ rbTextarea.focus(); }, 200);
   });
@@ -917,19 +925,24 @@ function initRbCarnet(){
   rbOverlay.addEventListener('click', function(e){
     if(e.target===this) this.classList.remove('open');
   });
-  rbSave.addEventListener('click', function(){
-    localStorage.setItem(RB_KEY, rbTextarea.value);
+
+  function doSave(){
+    var txt=rbTextarea.value;
+    if(window._rbSaveToFb) window._rbSaveToFb(txt);
     rbSavedMsg.classList.add('show');
     setTimeout(function(){ rbSavedMsg.classList.remove('show'); }, 2000);
-  });
+  }
+
+  rbSave.addEventListener('click', doSave);
+
+  /* Sauvegarde auto toutes les 5s si ouvert */
   setInterval(function(){
-    if(rbOverlay.classList.contains('open')){
-      localStorage.setItem(RB_KEY, rbTextarea.value);
+    if(rbOverlay.classList.contains('open') && window._rbSaveToFb){
+      window._rbSaveToFb(rbTextarea.value);
     }
   }, 5000);
 }
 
-/* Appel apres chargement complet */
 window.addEventListener('DOMContentLoaded', function(){ initRbCarnet(); });
 </script>
 
