@@ -9,393 +9,321 @@
 <title>💌 Mes Livraisons</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Lato:wght@300;400&display=swap');
+:root{--rose:#e8758a;--rose-light:#fce8ef;--gold:#c9973a;--mauve:#b5728a;--dark:#2d1a22;--cream:#fdf7f2;--white:#fff;--grey:#999;--border:rgba(232,117,138,0.25);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color:var(--dark);min-height:100vh;padding-bottom:40px;overflow-x:hidden;}
 
-:root {
-  --rose: #e8758a;
-  --rose-light: #fce8ef;
-  --gold: #c9973a;
-  --mauve: #b5728a;
-  --dark: #2d1a22;
-  --cream: #fdf7f2;
-  --white: #ffffff;
-  --grey: #999;
-  --border: rgba(232,117,138,0.25);
-}
+#fw{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;}
 
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-html { height:100%; }
-body {
-  font-family: 'Lato', sans-serif;
-  font-weight: 300;
-  background: var(--cream);
-  color: var(--dark);
-  min-height: 100vh;
-  padding-bottom: 40px;
-}
+/* LOGIN */
+#loginScreen{position:fixed;inset:0;z-index:10;background:#1a0a12;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;}
+.login-emoji{font-size:52px;margin-bottom:14px;display:block;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 0 18px rgba(244,167,185,0.8));}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.login-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#fff;text-align:center;margin-bottom:6px;text-shadow:0 0 24px rgba(232,117,138,0.7);}
+.login-sub{font-style:italic;color:rgba(255,200,220,0.8);font-size:0.92rem;text-align:center;margin-bottom:28px;}
+.login-card{background:rgba(255,255,255,0.97);border-radius:24px;padding:28px 20px;width:100%;max-width:320px;box-shadow:0 8px 48px rgba(232,117,138,0.3);border:1px solid rgba(232,117,138,0.3);}
+.login-label{font-family:'Playfair Display',serif;font-size:0.82rem;color:var(--mauve);letter-spacing:1.8px;text-transform:uppercase;margin-bottom:14px;display:block;text-align:center;}
+.code-input{display:block;width:100%;height:60px;border:2px solid var(--border);border-radius:14px;text-align:center;font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--rose);background:var(--cream);outline:none;-webkit-appearance:none;letter-spacing:10px;margin-bottom:14px;transition:border-color 0.2s,box-shadow 0.2s;}
+.code-input:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(232,117,138,0.15);}
+.code-input.error{border-color:#e74c3c;animation:shake 0.4s ease;}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.login-hint{text-align:center;font-size:0.78rem;color:#e74c3c;font-style:italic;margin-bottom:14px;min-height:18px;}
+.login-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--rose),var(--mauve));border:none;border-radius:30px;color:white;font-family:'Playfair Display',serif;font-size:1.05rem;font-style:italic;cursor:pointer;box-shadow:0 4px 16px rgba(232,117,138,0.4);-webkit-appearance:none;}
+.login-btn:active{opacity:0.85;}
+.login-footer{margin-top:22px;text-align:center;color:rgba(255,200,220,0.6);font-style:italic;font-size:0.8rem;}
 
-.header {
-  background: linear-gradient(160deg, #f9dde6 0%, #fceee4 60%, #f5e8f5 100%);
-  padding: 48px 24px 32px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.header::before {
-  content:''; position:absolute; top:-60px; right:-60px;
-  width:200px; height:200px;
-  background:radial-gradient(circle, rgba(232,117,138,0.2), transparent 70%);
-}
-.header::after {
-  content:''; position:absolute; bottom:-40px; left:-40px;
-  width:150px; height:150px;
-  background:radial-gradient(circle, rgba(201,151,58,0.15), transparent 70%);
-}
-.header-emoji { font-size:36px; display:block; margin-bottom:10px; }
-h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.2rem; font-weight: 700;
-  color: var(--rose); line-height: 1.15;
-}
-h1 span { display:block; font-size:1.4rem; color:var(--mauve); }
-.header-sub { margin-top:10px; font-style:italic; color:var(--mauve); font-size:0.9rem; }
-.deco-line { display:flex; align-items:center; gap:10px; margin:20px auto 0; max-width:220px; }
-.deco-line::before,.deco-line::after { content:''; flex:1; height:1px; background:linear-gradient(to right,transparent,rgba(232,117,138,0.5),transparent); }
-.deco-diamond { color:var(--gold); font-size:12px; }
-
-.sync-bar {
-  background: white; border-bottom: 1px solid var(--border);
-  padding: 8px 20px; display:flex; align-items:center;
-  justify-content:center; gap:8px; font-size:0.78rem; color:var(--grey);
-}
-.sync-dot {
-  width:8px; height:8px; border-radius:50%; background:#ccc; transition:background 0.4s; flex-shrink:0;
-}
-.sync-dot.connected { background:#4caf50; }
-.sync-dot.syncing { background:var(--gold); animation:pulse-dot 1s infinite; }
-.sync-dot.error { background:#e74c3c; }
-@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-.week-nav {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:18px 20px; background:var(--white);
-  border-bottom:1px solid var(--border);
-  position:sticky; top:0; z-index:100;
-  box-shadow:0 2px 12px rgba(232,117,138,0.08);
-}
-.nav-btn {
-  width:40px; height:40px; border-radius:50%;
-  border:1.5px solid var(--rose); background:transparent;
-  color:var(--rose); font-size:20px; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  -webkit-appearance:none;
-}
-.nav-btn:active { background:var(--rose); color:white; transform:scale(0.92); }
-.week-info { text-align:center; flex:1; }
-.week-range { font-family:'Playfair Display',serif; font-size:1rem; color:var(--dark); }
-.week-year { font-size:0.75rem; color:var(--grey); margin-top:2px; }
-
-.days-container { padding:16px 16px 0; display:flex; flex-direction:column; gap:12px; }
-
-.day-card {
-  background:var(--white); border-radius:16px; overflow:hidden;
-  box-shadow:0 2px 12px rgba(0,0,0,0.06); border:1px solid var(--border);
-}
-.day-card.today { border:2px solid var(--rose); box-shadow:0 4px 20px rgba(232,117,138,0.2); }
-.day-card.past { opacity:0.8; }
-
-.day-head {
-  display:flex; align-items:center; gap:14px; padding:14px 16px; cursor:pointer;
-  user-select:none; -webkit-user-select:none;
-  background:linear-gradient(to right, var(--rose-light), transparent);
-}
-.day-num-wrap { text-align:center; min-width:44px; }
-.day-abbr { font-size:0.65rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--mauve); }
-.day-num { font-family:'Playfair Display',serif; font-size:1.9rem; font-weight:700; color:var(--rose); line-height:1; }
-.day-info { flex:1; }
-.day-fullname { font-family:'Playfair Display',serif; font-size:0.95rem; color:var(--dark); }
-.today-pill {
-  display:inline-block; background:var(--rose); color:white;
-  font-size:0.6rem; letter-spacing:1.5px; text-transform:uppercase;
-  padding:2px 8px; border-radius:20px; margin-top:3px;
-}
-.entry-count { font-size:0.75rem; color:var(--grey); margin-top:3px; }
-.entry-count.has-entries { color:var(--gold); }
-.chevron { color:var(--grey); font-size:18px; transition:transform 0.25s; }
-.day-card.open .chevron { transform:rotate(90deg); }
-
-.day-body { max-height:0; overflow:hidden; transition:max-height 0.3s ease; }
-.day-card.open .day-body,
-.day-card.today .day-body { max-height:800px; }
-.day-body-inner { padding:4px 16px 16px; }
-
-.entries { display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
-
-.entry {
-  display:flex; align-items:flex-start; gap:10px;
-  background:var(--rose-light); border-radius:10px; padding:10px 12px;
-  animation:popIn 0.25s ease;
-}
-@keyframes popIn { from{opacity:0;transform:scale(0.95) translateY(4px)} to{opacity:1;transform:none} }
-.entry-dot { color:var(--rose); font-size:12px; margin-top:3px; flex-shrink:0; }
-.entry-content { flex:1; }
-.entry-text { font-size:0.92rem; line-height:1.45; color:var(--dark); }
-.entry-meta { font-size:0.7rem; color:var(--mauve); margin-top:3px; }
-.del-btn {
-  background:none; border:none; color:#ddd; cursor:pointer;
-  font-size:16px; padding:2px; flex-shrink:0; -webkit-appearance:none;
-}
-.del-btn:active { color:var(--rose); }
-
-.empty-msg { text-align:center; color:#ccc; font-style:italic; font-size:0.85rem; padding:8px 0 4px; }
-
-.input-row { display:flex; gap:8px; align-items:center; }
-.day-input {
-  flex:1; border:1.5px solid var(--border); border-radius:24px;
-  padding:10px 16px; font-family:'Lato',sans-serif; font-size:0.9rem;
-  color:var(--dark); background:var(--cream); outline:none; -webkit-appearance:none;
-}
-.day-input:focus { border-color:var(--rose); }
-.day-input::placeholder { color:#ccc; }
-.add-btn {
-  width:40px; height:40px; border-radius:50%;
-  background:linear-gradient(135deg, var(--rose), var(--mauve));
-  border:none; color:white; font-size:22px;
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer; box-shadow:0 3px 10px rgba(232,117,138,0.4);
-  -webkit-appearance:none; flex-shrink:0;
-}
-.add-btn:active { transform:scale(0.9); }
-
-.loading-overlay {
-  position:fixed; inset:0; background:rgba(253,247,242,0.95);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  z-index:999; gap:16px;
-}
-.loading-rose { font-size:40px; animation:spin 1.5s linear infinite; }
-@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-.loading-text { font-family:'Playfair Display',serif; color:var(--mauve); font-style:italic; }
-
-.footer { text-align:center; padding:32px 24px 20px; color:var(--mauve); font-style:italic; font-size:0.85rem; }
-.footer-rose { font-size:24px; display:block; margin-bottom:8px; animation:heartbeat 2.5s infinite; }
-@keyframes heartbeat { 0%,100%{transform:scale(1)} 25%{transform:scale(1.15)} 50%{transform:scale(1)} }
-
-.toast {
-  position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(100px);
-  background:var(--dark); color:white; padding:10px 22px; border-radius:30px;
-  font-size:0.85rem; z-index:998; opacity:0; transition:all 0.3s; white-space:nowrap;
-  box-shadow:0 4px 20px rgba(0,0,0,0.2);
-}
-.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+/* APP */
+#app{display:none;}
+.header{background:linear-gradient(160deg,#f9dde6 0%,#fceee4 60%,#f5e8f5 100%);padding:48px 24px 32px;text-align:center;position:relative;overflow:hidden;}
+.header::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(232,117,138,0.2),transparent 70%);}
+.header::after{content:'';position:absolute;bottom:-40px;left:-40px;width:150px;height:150px;background:radial-gradient(circle,rgba(201,151,58,0.15),transparent 70%);}
+.header-emoji{font-size:36px;display:block;margin-bottom:10px;}
+h1{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--rose);line-height:1.15;}
+h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
+.header-sub{margin-top:10px;font-style:italic;color:var(--mauve);font-size:0.9rem;}
+.deco-line{display:flex;align-items:center;gap:10px;margin:20px auto 0;max-width:220px;}
+.deco-line::before,.deco-line::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(232,117,138,0.5),transparent);}
+.deco-diamond{color:var(--gold);font-size:12px;}
+.header-actions{position:absolute;top:16px;right:16px;}
+.logout-btn{background:rgba(255,255,255,0.6);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:0.75rem;color:var(--mauve);cursor:pointer;font-style:italic;-webkit-appearance:none;}
+.sync-bar{background:white;border-bottom:1px solid var(--border);padding:8px 20px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:0.78rem;color:var(--grey);}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#ccc;transition:background 0.4s;flex-shrink:0;}
+.sync-dot.connected{background:#4caf50;}.sync-dot.syncing{background:var(--gold);animation:pdot 1s infinite;}.sync-dot.error{background:#e74c3c;}
+@keyframes pdot{0%,100%{opacity:1}50%{opacity:0.3}}
+.week-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(232,117,138,0.08);}
+.nav-btn{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--rose);background:transparent;color:var(--rose);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;}
+.nav-btn:active{background:var(--rose);color:white;}
+.week-info{text-align:center;flex:1;}
+.week-range{font-family:'Playfair Display',serif;font-size:1rem;color:var(--dark);}
+.week-year{font-size:0.75rem;color:var(--grey);margin-top:2px;}
+.days-container{padding:16px 16px 0;display:flex;flex-direction:column;gap:12px;}
+.day-card{background:var(--white);border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid var(--border);}
+.day-card.today{border:2px solid var(--rose);box-shadow:0 4px 20px rgba(232,117,138,0.2);}
+.day-card.past{opacity:0.8;}
+.day-head{display:flex;align-items:center;gap:14px;padding:14px 16px;cursor:pointer;user-select:none;-webkit-user-select:none;background:linear-gradient(to right,var(--rose-light),transparent);}
+.day-num-wrap{text-align:center;min-width:44px;}
+.day-abbr{font-size:0.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mauve);}
+.day-num{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--rose);line-height:1;}
+.day-info{flex:1;}
+.day-fullname{font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--dark);}
+.today-pill{display:inline-block;background:var(--rose);color:white;font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-top:3px;}
+.entry-count{font-size:0.75rem;color:var(--grey);margin-top:3px;}
+.entry-count.has-entries{color:var(--gold);}
+.chevron{color:var(--grey);font-size:18px;transition:transform 0.25s;}
+.day-card.open .chevron{transform:rotate(90deg);}
+.day-body{max-height:0;overflow:hidden;transition:max-height 0.3s ease;}
+.day-card.open .day-body,.day-card.today .day-body{max-height:800px;}
+.day-body-inner{padding:4px 16px 16px;}
+.entries{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.entry{display:flex;align-items:flex-start;gap:10px;background:var(--rose-light);border-radius:10px;padding:10px 12px;animation:popIn 0.25s ease;}
+@keyframes popIn{from{opacity:0;transform:scale(0.95) translateY(4px)}to{opacity:1;transform:none}}
+.entry-dot{color:var(--rose);font-size:12px;margin-top:3px;flex-shrink:0;}
+.entry-content{flex:1;}
+.entry-text{font-size:0.92rem;line-height:1.45;color:var(--dark);}
+.entry-meta{font-size:0.7rem;color:var(--mauve);margin-top:3px;}
+.del-btn{background:none;border:none;color:#ddd;cursor:pointer;font-size:16px;padding:2px;flex-shrink:0;-webkit-appearance:none;}
+.del-btn:active{color:var(--rose);}
+.empty-msg{text-align:center;color:#ccc;font-style:italic;font-size:0.85rem;padding:8px 0 4px;}
+.input-row{display:flex;gap:8px;align-items:center;}
+.day-input{flex:1;border:1.5px solid var(--border);border-radius:24px;padding:10px 16px;font-family:'Lato',sans-serif;font-size:0.9rem;color:var(--dark);background:var(--cream);outline:none;-webkit-appearance:none;}
+.day-input:focus{border-color:var(--rose);}
+.day-input::placeholder{color:#ccc;}
+.add-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--mauve));border:none;color:white;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 3px 10px rgba(232,117,138,0.4);-webkit-appearance:none;flex-shrink:0;}
+.add-btn:active{transform:scale(0.9);}
+.loading-overlay{position:fixed;inset:0;background:rgba(253,247,242,0.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:500;gap:16px;}
+.loading-rose{font-size:40px;animation:spin 1.5s linear infinite;}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.loading-text{font-family:'Playfair Display',serif;color:var(--mauve);font-style:italic;}
+.footer{text-align:center;padding:32px 24px 20px;color:var(--mauve);font-style:italic;font-size:0.85rem;}
+.footer-rose{font-size:24px;display:block;margin-bottom:8px;animation:hb 2.5s infinite;}
+@keyframes hb{0%,100%{transform:scale(1)}25%{transform:scale(1.15)}50%{transform:scale(1)}}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dark);color:white;padding:10px 22px;border-radius:30px;font-size:0.85rem;z-index:9999;opacity:0;transition:all 0.3s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
 
-<div class="loading-overlay" id="loadingOverlay">
-  <div class="loading-rose">🌹</div>
-  <div class="loading-text">Connexion en cours…</div>
-</div>
+<canvas id="fw"></canvas>
 
-<div class="header">
-  <span class="header-emoji">🚗</span>
-  <h1>Mes Livraisons <span>du Jour</span></h1>
-  <p class="header-sub">Pour que tu saches où je suis, ma chérie 💌</p>
-  <div class="deco-line"><span class="deco-diamond">◆</span></div>
-</div>
-
-<div class="sync-bar">
-  <div class="sync-dot" id="syncDot"></div>
-  <span id="syncLabel">Connexion…</span>
-</div>
-
-<div class="week-nav">
-  <button class="nav-btn" onclick="changeWeek(-1)">‹</button>
-  <div class="week-info">
-    <div class="week-range" id="weekRange">—</div>
-    <div class="week-year" id="weekYear"></div>
+<div id="loginScreen">
+  <span class="login-emoji">💌</span>
+  <div class="login-title">Mes Livraisons</div>
+  <div class="login-sub">Pour toi, ma chérie ✨</div>
+  <div class="login-card">
+    <label class="login-label">Code secret 🔑</label>
+    <input class="code-input" id="codeInput" type="password" inputmode="numeric"
+           maxlength="6" autocomplete="off" placeholder="••••••">
+    <div class="login-hint" id="loginHint"></div>
+    <button class="login-btn" id="loginBtn">Entrer ✨</button>
   </div>
-  <button class="nav-btn" onclick="changeWeek(1)">›</button>
+  <div class="login-footer">Pour toi et moi seulement 🌹</div>
 </div>
 
-<div class="days-container" id="daysContainer"></div>
-
-<div class="footer">
-  <span class="footer-rose">🌹</span>
-  Chaque colis livré, je pense à toi ✨
+<div id="app">
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-rose">🌹</div>
+    <div class="loading-text">Connexion en cours…</div>
+  </div>
+  <div class="header">
+    <div class="header-actions">
+      <button class="logout-btn" id="logoutBtn">🔒 Verrouiller</button>
+    </div>
+    <span class="header-emoji">🚗</span>
+    <h1>Mes Livraisons <span>du Jour</span></h1>
+    <p class="header-sub">Pour que tu saches où je suis, ma chérie 💌</p>
+    <div class="deco-line"><span class="deco-diamond">◆</span></div>
+  </div>
+  <div class="sync-bar">
+    <div class="sync-dot" id="syncDot"></div>
+    <span id="syncLabel">Connexion…</span>
+  </div>
+  <div class="week-nav">
+    <button class="nav-btn" id="btnPrev">‹</button>
+    <div class="week-info">
+      <div class="week-range" id="weekRange">—</div>
+      <div class="week-year" id="weekYear"></div>
+    </div>
+    <button class="nav-btn" id="btnNext">›</button>
+  </div>
+  <div class="days-container" id="daysContainer"></div>
+  <div class="footer">
+    <span class="footer-rose">🌹</span>
+    Chaque colis livré, je pense à toi ✨
+  </div>
 </div>
-
 <div class="toast" id="toast"></div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, set, remove, onValue }
-  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+<!-- ══ TOUT EN UN SEUL SCRIPT ══ -->
+<script>
+// ── FEUX D'ARTIFICE (script classique, pas de module) ──
+(function(){
+  const canvas=document.getElementById('fw'),ctx=canvas.getContext('2d');
+  let on=true;
+  window._stopFw=function(){on=false;ctx.clearRect(0,0,canvas.width,canvas.height);};
+  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  const C=['#f4a7b9','#e8758a','#d4a843','#f0d080','#c9829a','#ff85a1','#ffd700','#ff69b4','#ffb347','#ee82ee'];
+  const parts=[],rocks=[];let nxt=0;
+  function Petal(x,y,c){
+    this.x=x;this.y=y;this.c=c;
+    var a=Math.random()*Math.PI*2,s=2+Math.random()*5;
+    this.vx=Math.cos(a)*s;this.vy=Math.sin(a)*s;
+    this.a=1;this.d=0.011+Math.random()*0.011;
+    this.sz=3+Math.random()*4;this.np=5+Math.floor(Math.random()*4);
+    this.r=Math.random()*Math.PI*2;this.rv=(Math.random()-.5)*0.12;this.g=0.055;
+  }
+  Petal.prototype.tick=function(){this.vx*=0.98;this.vy=this.vy*0.98+this.g;this.x+=this.vx;this.y+=this.vy;this.r+=this.rv;this.a-=this.d;};
+  Petal.prototype.draw=function(){
+    if(this.a<=0)return;
+    ctx.save();ctx.globalAlpha=this.a;ctx.translate(this.x,this.y);ctx.rotate(this.r);
+    ctx.beginPath();
+    for(var i=0;i<this.np;i++){var a=(i/this.np)*Math.PI*2,a2=((i+.5)/this.np)*Math.PI*2;ctx.lineTo(Math.cos(a)*this.sz,Math.sin(a)*this.sz);ctx.lineTo(Math.cos(a2)*this.sz*.4,Math.sin(a2)*this.sz*.4);}
+    ctx.closePath();ctx.fillStyle=this.c;ctx.shadowColor=this.c;ctx.shadowBlur=10;ctx.fill();ctx.restore();
+  };
+  Petal.prototype.dead=function(){return this.a<=0;};
+  function Rocket(){
+    this.x=canvas.width*(0.15+Math.random()*0.7);this.y=canvas.height;
+    var tx=canvas.width*(0.1+Math.random()*0.8),ty=canvas.height*(0.1+Math.random()*0.45);
+    var dx=tx-this.x,dy=ty-this.y,d=Math.sqrt(dx*dx+dy*dy),s=8+Math.random()*6;
+    this.vx=(dx/d)*s;this.vy=(dy/d)*s;this.tx=tx;this.ty=ty;
+    this.c=C[Math.floor(Math.random()*C.length)];this.trail=[];this.done=false;
+  }
+  Rocket.prototype.tick=function(){
+    this.trail.push({x:this.x,y:this.y});if(this.trail.length>12)this.trail.shift();
+    this.x+=this.vx;this.y+=this.vy;
+    var dx=this.tx-this.x,dy=this.ty-this.y;
+    if(dx*dx+dy*dy<400){this.explode();this.done=true;}
+  };
+  Rocket.prototype.explode=function(){
+    var n=60+Math.floor(Math.random()*50),c1=C[Math.floor(Math.random()*C.length)],c2=C[Math.floor(Math.random()*C.length)];
+    for(var i=0;i<n;i++)parts.push(new Petal(this.x,this.y,i%2===0?c1:c2));
+  };
+  Rocket.prototype.draw=function(){
+    this.trail.forEach(function(t,i,arr){ctx.globalAlpha=(i/arr.length)*0.6;ctx.beginPath();ctx.arc(t.x,t.y,2,0,Math.PI*2);ctx.fillStyle=this.c;ctx.fill();},this);
+    ctx.globalAlpha=1;ctx.beginPath();ctx.arc(this.x,this.y,3,0,Math.PI*2);ctx.fillStyle='#fff';ctx.shadowColor=this.c;ctx.shadowBlur=12;ctx.fill();ctx.shadowBlur=0;
+  };
+  function loop(ts){
+    if(!on)return;
+    requestAnimationFrame(loop);
+    ctx.fillStyle='rgba(26,10,18,0.20)';ctx.fillRect(0,0,canvas.width,canvas.height);
+    if(ts>nxt){rocks.push(new Rocket());nxt=ts+400+Math.random()*500;}
+    for(var i=rocks.length-1;i>=0;i--){rocks[i].tick();rocks[i].draw();if(rocks[i].done)rocks.splice(i,1);}
+    for(var j=parts.length-1;j>=0;j--){parts[j].tick();parts[j].draw();if(parts[j].dead())parts.splice(j,1);}
+  }
+  requestAnimationFrame(loop);
+})();
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBbFd00z7R2wrgG94I0LHZd7bgNpIR6uzw",
-  authDomain: "livraisons-73798.firebaseapp.com",
-  databaseURL: "https://livraisons-73798-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "livraisons-73798",
-  storageBucket: "livraisons-73798.firebasestorage.app",
-  messagingSenderId: "631708987448",
-  appId: "1:631708987448:web:ac4a859bd2728db50af6cd"
-};
+// ── LOGIN (vérification AVANT de charger Firebase) ──
+var SECRET='270424';
+var SESSION_KEY='liv_auth';
 
-const app = initializeApp(firebaseConfig);
-const db  = getDatabase(app);
+var codeEl=document.getElementById('codeInput');
+var hintEl=document.getElementById('loginHint');
+var loginBtn=document.getElementById('loginBtn');
 
-const FR_DAYS   = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
-const FR_DAYS_S = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
-const FR_MONTHS = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
-const FR_MONTHS_FULL = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+setTimeout(function(){codeEl.focus();},300);
 
-const todayDate = new Date(); todayDate.setHours(0,0,0,0);
-let weekOffset = 0;
-let allData    = {};
-
-function getMondayOf(d) {
-  const date = new Date(d);
-  const day  = date.getDay();
-  date.setDate(date.getDate() + (day === 0 ? -6 : 1 - day));
-  date.setHours(0,0,0,0);
-  return date;
-}
-function isoDate(d) { return d.toISOString().slice(0,10); }
-function nowTime() {
-  const n = new Date();
-  return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');
-}
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function safeKey(ds) { return ds.replace(/-/g,'_'); }
-
-function setSync(state, label) {
-  document.getElementById('syncDot').className = 'sync-dot ' + state;
-  document.getElementById('syncLabel').textContent = label;
-}
-
-// Écoute Firebase en temps réel
-onValue(ref(db, 'livraisons'), (snapshot) => {
-  allData = snapshot.val() || {};
-  setSync('connected', 'Synchronisé en temps réel ✓');
-  document.getElementById('loadingOverlay').style.display = 'none';
-  render();
-}, () => {
-  setSync('error', 'Erreur de connexion');
-  document.getElementById('loadingOverlay').style.display = 'none';
+codeEl.addEventListener('input',function(){
+  codeEl.value=codeEl.value.replace(/\D/g,'').slice(0,6);
 });
+codeEl.addEventListener('keydown',function(e){
+  if(e.key==='Enter'){e.preventDefault();tryLogin();}
+});
+loginBtn.addEventListener('click',function(){tryLogin();});
 
-window.addEntry = async function(ds) {
-  const inp  = document.getElementById('inp-'+ds);
-  const text = inp.value.trim();
-  if (!text) { inp.focus(); return; }
-  setSync('syncing', 'Enregistrement…');
-  const existing = (allData[safeKey(ds)] && allData[safeKey(ds)].entries)
-    ? { ...allData[safeKey(ds)].entries } : {};
-  existing['e'+Date.now()] = { text, time: nowTime() };
-  try {
-    await set(ref(db, 'livraisons/'+safeKey(ds)+'/entries'), existing);
-    inp.value = '';
-    showToast('✓ Noté !');
-    const card = document.querySelector('[data-ds="'+ds+'"]');
-    if (card && !card.classList.contains('open')) card.classList.add('open');
-    setTimeout(() => { const el=document.getElementById('inp-'+ds); if(el) el.focus(); }, 60);
-  } catch { setSync('error','Erreur sync'); showToast('⚠️ Erreur, réessaie'); }
-};
-
-window.delEntry = async function(ds, id) {
-  setSync('syncing','Suppression…');
-  try { await remove(ref(db,'livraisons/'+safeKey(ds)+'/entries/'+id)); showToast('🗑 Supprimé'); }
-  catch { setSync('error','Erreur sync'); }
-};
-
-window.toggleCard = function(card) { card.classList.toggle('open'); };
-
-window.changeWeek = function(dir) {
-  weekOffset += dir; render();
-  window.scrollTo({top:0, behavior:'smooth'});
-};
-
-function render() {
-  const base = getMondayOf(todayDate);
-  base.setDate(base.getDate() + weekOffset * 7);
-  const sun = new Date(base); sun.setDate(sun.getDate() + 6);
-
-  document.getElementById('weekRange').textContent =
-    base.getMonth() === sun.getMonth()
-      ? base.getDate()+' — '+sun.getDate()+' '+FR_MONTHS_FULL[sun.getMonth()]
-      : base.getDate()+' '+FR_MONTHS[base.getMonth()]+' — '+sun.getDate()+' '+FR_MONTHS[sun.getMonth()];
-  document.getElementById('weekYear').textContent = sun.getFullYear();
-
-  const container = document.getElementById('daysContainer');
-  const openDays  = {};
-  container.querySelectorAll('.day-card.open').forEach(c => { openDays[c.dataset.ds]=true; });
-  container.innerHTML = '';
-
-  for (let i = 0; i < 7; i++) {
-    const day = new Date(base); day.setDate(day.getDate()+i);
-    const ds  = isoDate(day);
-    const sk  = safeKey(ds);
-    const isToday = ds === isoDate(todayDate);
-    const isPast  = day < todayDate;
-    const shouldOpen = isToday || openDays[ds];
-
-    const dayData = allData[sk] || {};
-    const entries = dayData.entries ? Object.entries(dayData.entries) : [];
-    entries.sort((a,b) => a[0].localeCompare(b[0]));
-
-    const countLabel = entries.length === 0 ? 'Rien noté'
-      : entries.length === 1 ? '1 livraison' : entries.length+' livraisons';
-
-    const entriesHTML = entries.length === 0
-      ? `<div class="empty-msg">Rien encore… ✨</div>`
-      : entries.map(([id,e]) => `
-        <div class="entry">
-          <span class="entry-dot">◆</span>
-          <div class="entry-content">
-            <div class="entry-text">${esc(e.text)}</div>
-            ${e.time?`<div class="entry-meta">⏱ ${e.time}</div>`:''}
-          </div>
-          <button class="del-btn" onclick="delEntry('${ds}','${id}')">✕</button>
-        </div>`).join('');
-
-    const card = document.createElement('div');
-    card.className = 'day-card'+(isToday?' today':'')+(isPast?' past':'')+(shouldOpen?' open':'');
-    card.dataset.ds = ds;
-    card.innerHTML = `
-      <div class="day-head" onclick="toggleCard(this.parentElement)">
-        <div class="day-num-wrap">
-          <div class="day-abbr">${FR_DAYS_S[day.getDay()]}</div>
-          <div class="day-num">${day.getDate()}</div>
-        </div>
-        <div class="day-info">
-          <div class="day-fullname">${FR_DAYS[day.getDay()]}</div>
-          ${isToday?'<span class="today-pill">Aujourd\'hui</span>':''}
-          <div class="entry-count${entries.length?' has-entries':''}">${countLabel}</div>
-        </div>
-        <span class="chevron">›</span>
-      </div>
-      <div class="day-body"><div class="day-body-inner">
-        <div class="entries">${entriesHTML}</div>
-        <div class="input-row">
-          <input class="day-input" id="inp-${ds}" type="text"
-            placeholder="Ex: Paris 11e, 14h30…" maxlength="140"
-            inputmode="text" autocomplete="off" autocorrect="off" spellcheck="false"
-            onkeydown="if(event.key==='Enter'){event.preventDefault();addEntry('${ds}')}">
-          <button class="add-btn" onclick="addEntry('${ds}')">+</button>
-        </div>
-      </div></div>`;
-    container.appendChild(card);
+function tryLogin(){
+  var code=codeEl.value.replace(/\D/g,'');
+  if(code===SECRET){
+    window._stopFw();
+    sessionStorage.setItem(SESSION_KEY,'1');
+    var ls=document.getElementById('loginScreen');
+    ls.style.transition='opacity 0.4s';
+    ls.style.opacity='0';
+    setTimeout(function(){
+      ls.style.display='none';
+      loadApp();
+    },400);
+  } else {
+    codeEl.classList.add('error');
+    hintEl.textContent='Code incorrect, réessaie ✕';
+    setTimeout(function(){
+      codeEl.classList.remove('error');
+      codeEl.value='';
+      hintEl.textContent='';
+      codeEl.focus();
+    },1300);
   }
 }
 
-let toastTimer;
-window.showToast = function(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
-};
+// Déjà connecté ?
+if(sessionStorage.getItem(SESSION_KEY)==='1'){
+  window._stopFw();
+  document.getElementById('loginScreen').style.display='none';
+  loadApp();
+}
+
+// ── CHARGER FIREBASE SEULEMENT APRÈS LOGIN ──
+function loadApp(){
+  document.getElementById('app').style.display='block';
+  // Charger Firebase dynamiquement
+  var s=document.createElement('script');
+  s.type='module';
+  s.textContent=`
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import{getDatabase,ref,set,remove,onValue}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+const cfg={apiKey:"AIzaSyBbFd00z7R2wrgG94I0LHZd7bgNpIR6uzw",authDomain:"livraisons-73798.firebaseapp.com",databaseURL:"https://livraisons-73798-default-rtdb.europe-west1.firebasedatabase.app",projectId:"livraisons-73798",storageBucket:"livraisons-73798.firebasestorage.app",messagingSenderId:"631708987448",appId:"1:631708987448:web:ac4a859bd2728db50af6cd"};
+const db=getDatabase(initializeApp(cfg));
+const FR_DAYS=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+const FR_S=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+const FR_M=['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+const FR_MF=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const today=new Date();today.setHours(0,0,0,0);
+let off=0,data={};
+const mon=d=>{const dt=new Date(d),day=dt.getDay();dt.setDate(dt.getDate()+(day===0?-6:1-day));dt.setHours(0,0,0,0);return dt;};
+const iso=d=>d.toISOString().slice(0,10);
+const sk=ds=>ds.replace(/-/g,'_');
+const nowT=()=>{const n=new Date();return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');};
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const sync=(st,lb)=>{document.getElementById('syncDot').className='sync-dot '+st;document.getElementById('syncLabel').textContent=lb;};
+onValue(ref(db,'livraisons'),snap=>{data=snap.val()||{};sync('connected','Synchronisé ✓');document.getElementById('loadingOverlay').style.display='none';render();},()=>{sync('error','Erreur connexion');document.getElementById('loadingOverlay').style.display='none';});
+document.getElementById('logoutBtn').addEventListener('click',()=>{sessionStorage.removeItem('liv_auth');location.reload();});
+document.getElementById('btnPrev').addEventListener('click',()=>{off--;render();window.scrollTo({top:0,behavior:'smooth'});});
+document.getElementById('btnNext').addEventListener('click',()=>{off++;render();window.scrollTo({top:0,behavior:'smooth'});});
+async function add(ds){const inp=document.getElementById('inp-'+ds);const t=inp.value.trim();if(!t){inp.focus();return;}sync('syncing','Enregistrement…');const ex=data[sk(ds)]?.entries?{...data[sk(ds)].entries}:{};ex['e'+Date.now()]={text:t,time:nowT()};try{await set(ref(db,'livraisons/'+sk(ds)+'/entries'),ex);inp.value='';toast('✓ Noté !');const c=document.querySelector('[data-ds="'+ds+'"]');if(c&&!c.classList.contains('open'))c.classList.add('open');setTimeout(()=>document.getElementById('inp-'+ds)?.focus(),60);}catch{sync('error','Erreur');toast('⚠️ Erreur');}}
+async function del(ds,id){sync('syncing','Suppression…');try{await remove(ref(db,'livraisons/'+sk(ds)+'/entries/'+id));toast('🗑 Supprimé');}catch{sync('error','Erreur');}}
+function render(){
+  const base=mon(today);base.setDate(base.getDate()+off*7);
+  const sun=new Date(base);sun.setDate(sun.getDate()+6);
+  document.getElementById('weekRange').textContent=base.getMonth()===sun.getMonth()?base.getDate()+' — '+sun.getDate()+' '+FR_MF[sun.getMonth()]:base.getDate()+' '+FR_M[base.getMonth()]+' — '+sun.getDate()+' '+FR_M[sun.getMonth()];
+  document.getElementById('weekYear').textContent=sun.getFullYear();
+  const container=document.getElementById('daysContainer');
+  const od={};container.querySelectorAll('.day-card.open').forEach(c=>{od[c.dataset.ds]=true;});
+  container.innerHTML='';
+  for(let i=0;i<7;i++){
+    const day=new Date(base);day.setDate(day.getDate()+i);
+    const ds=iso(day),isT=ds===iso(today),isP=day<today;
+    const entries=data[sk(ds)]?.entries?Object.entries(data[sk(ds)].entries):[];
+    entries.sort((a,b)=>a[0].localeCompare(b[0]));
+    const n=entries.length;
+    const eHTML=n===0?'<div class="empty-msg">Rien encore… ✨</div>':entries.map(([id,e])=>'<div class="entry"><span class="entry-dot">◆</span><div class="entry-content"><div class="entry-text">'+esc(e.text)+'</div>'+(e.time?'<div class="entry-meta">⏱ '+e.time+'</div>':'')+'</div><button class="del-btn" data-ds="'+ds+'" data-id="'+id+'">✕</button></div>').join('');
+    const card=document.createElement('div');
+    card.className='day-card'+(isT?' today':'')+(isP?' past':'')+(isT||od[ds]?' open':'');
+    card.dataset.ds=ds;
+    const pill=isT?'<span class="today-pill">Aujourd&#39;hui</span>':'';
+    const countTxt=n===0?'Rien not\u00e9':n===1?'1 livraison':n+' livraisons';
+    card.innerHTML='<div class="day-head"><div class="day-num-wrap"><div class="day-abbr">'+FR_S[day.getDay()]+'</div><div class="day-num">'+day.getDate()+'</div></div><div class="day-info"><div class="day-fullname">'+FR_DAYS[day.getDay()]+'</div>'+pill+'<div class="entry-count'+(n?' has-entries':'')+'">'+countTxt+'</div></div><span class="chevron">&#8250;</span></div><div class="day-body"><div class="day-body-inner"><div class="entries">'+eHTML+'</div><div class="input-row"><input class="day-input" id="inp-'+ds+'" type="text" placeholder="Ex: Paris 11e, 14h30" maxlength="140" inputmode="text" autocomplete="off" autocorrect="off" spellcheck="false"><button class="add-btn" data-ds="'+ds+'">+</button></div></div></div>';
+    card.querySelector('.day-head').addEventListener('click',()=>card.classList.toggle('open'));
+    card.querySelector('.add-btn').addEventListener('click',()=>add(ds));
+    card.querySelector('.day-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();add(ds);}});
+    card.querySelectorAll('.del-btn').forEach(b=>b.addEventListener('click',()=>del(b.dataset.ds,b.dataset.id)));
+    container.appendChild(card);
+  }
+}
+let tt;function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2200);}
+`;
+  document.head.appendChild(s);
+}
 </script>
 </body>
 </html>
