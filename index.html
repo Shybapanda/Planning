@@ -60,6 +60,20 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
 .msg-card-close{background:linear-gradient(135deg,var(--rose),var(--mauve));border:none;border-radius:30px;color:white;padding:10px 28px;font-family:'Playfair Display',serif;font-size:0.9rem;cursor:pointer;-webkit-appearance:none;}
 .rb-btn{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #4fc3f7;border-radius:20px;padding:6px 12px;font-size:0.72rem;color:#4fc3f7;cursor:pointer;font-weight:700;letter-spacing:0.5px;-webkit-appearance:none;white-space:nowrap;box-shadow:0 2px 10px rgba(79,195,247,0.3);}
 .rb-btn:active{opacity:0.8;}
+.map-btn{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#1e88e5,#1565c0);border:none;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 10px rgba(30,136,229,0.4);-webkit-appearance:none;position:relative;}
+.map-btn:active{opacity:0.8;}
+.map-dot{position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:#4caf50;border:1.5px solid white;display:none;animation:mapdot 1.5s infinite;}
+.map-dot.active{display:block;}
+@keyframes mapdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
+/* MAP OVERLAY */
+.map-overlay{position:fixed;inset:0;z-index:9002;background:rgba(0,0,0,0.92);display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.map-overlay.open{opacity:1;pointer-events:all;}
+.map-header{background:#1565c0;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.map-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:white;display:flex;align-items:center;gap:8px;}
+.map-status{font-size:0.7rem;color:rgba(255,255,255,0.7);font-style:italic;margin-top:2px;}
+.map-close{background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);border-radius:20px;color:white;padding:6px 16px;font-size:0.8rem;cursor:pointer;-webkit-appearance:none;}
+#gmap{flex:1;width:100%;}
+.map-info{background:#1565c0;padding:10px 20px;font-size:0.75rem;color:rgba(255,255,255,0.8);text-align:center;font-style:italic;flex-shrink:0;}
 /* CARNET REDBULL */
 .rb-overlay{position:fixed;inset:0;z-index:9001;background:rgba(10,5,20,0.92);backdrop-filter:blur(6px);display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.3s;}
 .rb-overlay.open{opacity:1;pointer-events:all;}
@@ -138,7 +152,7 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
 <div id="loginScreen">
   <span class="login-emoji">💌</span>
   <div class="login-title">Mes Livraisons</div>
-  <div class="login-sub">Pour toi, ma femme ✨</div>
+  <div class="login-sub">Pour toi, ma chérie ✨</div>
   <div class="login-card">
     <label class="login-label">Code secret 🔑</label>
     <input class="code-input" id="codeInput" type="password" inputmode="numeric"
@@ -156,13 +170,14 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
   </div>
   <div class="header">
     <div class="header-actions">
+      <button class="map-btn" id="mapBtn">📍<span class="map-dot" id="mapDot"></span></button>
       <button class="gift-btn" id="giftBtn">🎁</button>
       <button class="rb-btn" id="rbBtn">🐂 RedBull</button>
       <button class="logout-btn" id="logoutBtn">🔒 Verrouiller</button>
     </div>
     <span class="header-emoji">🚗</span>
     <h1>Mes Livraisons <span>du Jour</span></h1>
-    <p class="header-sub">Pour que tu saches où je suis, ma femme 💌</p>
+    <p class="header-sub">Pour que tu saches où je suis, ma chérie 💌</p>
     <div class="deco-line"><span class="deco-diamond">◆</span></div>
   </div>
   <div class="sync-bar">
@@ -507,6 +522,12 @@ onValue(rbRef,snap=>{
 });
 window._rbSaveToFb=async function(txt){
   try{ await set(rbRef,txt); } catch(e){ console.warn('rb save err',e); }
+};
+
+/* Position GPS → Firebase */
+const posRef=ref(db,'position');
+window._updatePosition=async function(lat,lng){
+  try{ await set(posRef,{lat:lat,lng:lng,ts:Date.now()}); } catch(e){}
 };
 `;
   document.head.appendChild(s);
@@ -944,7 +965,117 @@ function initRbCarnet(){
 }
 
 window.addEventListener('DOMContentLoaded', function(){ initRbCarnet(); });
+
+/* ═══════════════════════════
+   GOOGLE MAPS + GPS TEMPS RÉEL
+═══════════════════════════ */
+var mapLoaded=false, gmap=null, marker=null, watchId=null;
+var mapOverlay=null, mapBtn=null, mapDot=null, mapStatus=null;
+
+function initMapUI(){
+  mapOverlay=document.getElementById('mapOverlay');
+  mapBtn=document.getElementById('mapBtn');
+  mapDot=document.getElementById('mapDot');
+  mapStatus=document.getElementById('mapStatus');
+  if(!mapBtn||!mapOverlay) return;
+
+function loadGoogleMaps(){
+  if(mapLoaded) return;
+  mapLoaded=true;
+  var s=document.createElement('script');
+  s.src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBQ4_slfyXAn1hqvt4xSxIXUHbAy66SC4s&callback=initMap';
+  s.async=true; s.defer=true;
+  document.head.appendChild(s);
+}
+
+window.initMap=function(){
+  var defaultPos={lat:48.8566, lng:2.3522};
+  gmap=new google.maps.Map(document.getElementById('gmap'),{
+    center:defaultPos, zoom:14,
+    mapTypeId:'roadmap',
+    disableDefaultUI:false,
+    zoomControl:true,
+    streetViewControl:false,
+    fullscreenControl:false,
+    styles:[
+      {featureType:'water',elementType:'geometry',stylers:[{color:'#e9e9e9'}]},
+      {featureType:'landscape',stylers:[{color:'#f2f2f2'}]},
+      {featureType:'road',elementType:'geometry',stylers:[{color:'#ffffff'}]},
+      {featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#e8758a',weight:0.5}]},
+      {featureType:'poi',stylers:[{visibility:'off'}]},
+      {featureType:'transit',stylers:[{visibility:'off'}]}
+    ]
+  });
+
+  marker=new google.maps.Marker({
+    map:gmap,
+    title:'Je suis ici 💌',
+    icon:{
+      path:google.maps.SymbolPath.CIRCLE,
+      scale:12,
+      fillColor:'#e8758a',
+      fillOpacity:1,
+      strokeColor:'white',
+      strokeWeight:3
+    }
+  });
+
+  /* Info window */
+  var iw=new google.maps.InfoWindow({content:'<div style="font-family:serif;color:#e8758a;font-weight:bold">Je suis ici 💌</div>'});
+  marker.addListener('click',function(){ iw.open(gmap,marker); });
+
+  startGPS();
+};
+
+function startGPS(){
+  if(!navigator.geolocation){
+    if(mapStatus) mapStatus.textContent='GPS non disponible sur cet appareil';
+    return;
+  }
+  if(mapStatus) mapStatus.textContent='Recherche du signal GPS…';
+  watchId=navigator.geolocation.watchPosition(
+    function(pos){
+      var lat=pos.coords.latitude, lng=pos.coords.longitude;
+      var acc=Math.round(pos.coords.accuracy);
+      var latlng={lat:lat,lng:lng};
+      marker.setPosition(latlng);
+      gmap.panTo(latlng);
+      if(mapStatus) mapStatus.textContent='En direct — précision ~'+acc+'m';
+      if(mapDot) mapDot.classList.add('active');
+      /* Envoyer à Firebase */
+      if(window._updatePosition) window._updatePosition(lat,lng);
+    },
+    function(err){
+      if(mapStatus) mapStatus.textContent='Erreur GPS: '+err.message;
+    },
+    {enableHighAccuracy:true, maximumAge:5000, timeout:10000}
+  );
+}
+
+  mapBtn.addEventListener('click',function(){
+    mapOverlay.classList.add('open');
+    loadGoogleMaps();
+  });
+  document.getElementById('mapClose').addEventListener('click',function(){
+    mapOverlay.classList.remove('open');
+  });
+  mapOverlay.addEventListener('click',function(e){
+    if(e.target===this) this.classList.remove('open');
+  });
+}
+window.addEventListener('DOMContentLoaded', function(){ initMapUI(); });
 </script>
 
+<div class="map-overlay" id="mapOverlay">
+  <div class="map-header">
+    <div>
+      <div class="map-title">📍 Ma position en direct</div>
+      <div class="map-status" id="mapStatus">Localisation en cours…</div>
+    </div>
+    <button class="map-close" id="mapClose">✕ Fermer</button>
+  </div>
+  <div id="gmap"></div>
+  <div class="map-info">Position mise à jour en temps réel 🔄</div>
+</div>
 </body>
 </html>
