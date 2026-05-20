@@ -54,6 +54,25 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
 .rb-btn{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #4fc3f7;border-radius:20px;padding:6px 12px;font-size:0.72rem;color:#4fc3f7;cursor:pointer;font-weight:700;letter-spacing:0.5px;-webkit-appearance:none;white-space:nowrap;box-shadow:0 2px 10px rgba(79,195,247,0.3);}
 .rb-btn:active{opacity:0.8;}
 .sync-bar{background:white;border-bottom:1px solid var(--border);padding:8px 20px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:0.78rem;color:var(--grey);}
+/* STATUT */
+.status-bar{background:white;border-bottom:1px solid var(--border);padding:12px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.status-current{display:flex;align-items:center;gap:10px;}
+.status-bubble{display:flex;align-items:center;gap:8px;padding:8px 18px;border-radius:30px;font-family:'Playfair Display',serif;font-size:0.95rem;font-style:italic;border:1.5px solid transparent;transition:all 0.3s;}
+.status-bubble.livraison{background:#fff3e0;border-color:#ff9800;color:#e65100;}
+.status-bubble.pause{background:#e8f5e9;border-color:#4caf50;color:#2e7d32;}
+.status-bubble.rentre{background:var(--rose-light);border-color:var(--rose);color:var(--mauve);}
+.status-bubble.inconnu{background:#f5f5f5;border-color:#ddd;color:#999;font-style:italic;}
+.status-emoji{font-size:20px;}
+.status-btns{display:flex;gap:8px;}
+.status-btn{border:1.5px solid transparent;border-radius:24px;padding:7px 14px;font-size:0.78rem;cursor:pointer;font-family:'Lato',sans-serif;font-weight:400;transition:all 0.2s;-webkit-appearance:none;background:white;}
+.status-btn.livraison{border-color:#ff9800;color:#e65100;}
+.status-btn.pause{border-color:#4caf50;color:#2e7d32;}
+.status-btn.rentre{border-color:var(--rose);color:var(--mauve);}
+.status-btn.active{color:white;}
+.status-btn.livraison.active{background:#ff9800;border-color:#ff9800;}
+.status-btn.pause.active{background:#4caf50;border-color:#4caf50;}
+.status-btn.rentre.active{background:var(--rose);border-color:var(--rose);}
+.status-updated{font-size:0.65rem;color:#bbb;font-style:italic;}
 .sync-dot{width:8px;height:8px;border-radius:50%;background:#ccc;transition:background 0.4s;flex-shrink:0;}
 .sync-dot.connected{background:#4caf50;}.sync-dot.syncing{background:var(--gold);animation:pdot 1s infinite;}.sync-dot.error{background:#e74c3c;}
 @keyframes pdot{0%,100%{opacity:1}50%{opacity:0.3}}
@@ -174,7 +193,7 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
 <div id="loginScreen">
   <span class="login-emoji">&#128140;</span>
   <div class="login-title">Mes Livraisons</div>
-  <div class="login-sub">Pour toi, ma femme &#10024;</div>
+  <div class="login-sub">Pour toi, ma ch&#233;rie &#10024;</div>
   <div class="login-card">
     <label class="login-label">Code secret &#128273;</label>
     <input class="code-input" id="codeInput" type="password" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;">
@@ -197,7 +216,7 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
     </div>
     <span class="header-emoji">&#128663;</span>
     <h1>Mes Livraisons <span>du Jour</span></h1>
-    <p class="header-sub">Pour que tu saches o&#249; je suis, ma femme &#128140;</p>
+    <p class="header-sub">Pour que tu saches o&#249; je suis, ma ch&#233;rie &#128140;</p>
     <div class="deco-line"><span class="deco-diamond">&#9670;</span></div>
     <div class="counter-wrap">
       <span class="counter-heart">&#10084;&#65039;</span>
@@ -209,6 +228,22 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
     <div class="sync-dot" id="syncDot"></div>
     <span id="syncLabel">Connexion&#8230;</span>
   </div>
+  <!-- STATUT -->
+  <div class="status-bar" id="statusBar">
+    <div class="status-current">
+      <div class="status-bubble inconnu" id="statusBubble">
+        <span class="status-emoji" id="statusEmoji">&#10067;</span>
+        <span id="statusText">Statut inconnu</span>
+      </div>
+    </div>
+    <div class="status-btns">
+      <button class="status-btn livraison" data-status="livraison" data-emoji="&#128663;" data-label="En livraison">&#128663; En livraison</button>
+      <button class="status-btn pause" data-status="pause" data-emoji="&#9749;" data-label="En pause">&#9749; En pause</button>
+      <button class="status-btn rentre" data-status="rentre" data-emoji="&#127968;" data-label="Rentr&#233;">&#127968; Rentr&#233;</button>
+    </div>
+    <div class="status-updated" id="statusUpdated"></div>
+  </div>
+
   <div class="week-nav">
     <button class="nav-btn" id="btnPrev">&#8249;</button>
     <div class="week-info">
@@ -360,6 +395,14 @@ async function add(ds){const inp=document.getElementById('inp-'+ds);const t=inp.
 async function del(ds,id){sync('syncing','Suppression\u2026');try{await remove(ref(db,'livraisons/'+sk(ds)+'/entries/'+id));toast('\uD83D\uDDD1 Supprim\u00e9');}catch{sync('error','Erreur');}}
 function render(){const base=mon(today);base.setDate(base.getDate()+off*7);const sun=new Date(base);sun.setDate(sun.getDate()+6);document.getElementById('weekRange').textContent=base.getMonth()===sun.getMonth()?base.getDate()+' \u2014 '+sun.getDate()+' '+FMF[sun.getMonth()]:base.getDate()+' '+FM[base.getMonth()]+' \u2014 '+sun.getDate()+' '+FM[sun.getMonth()];document.getElementById('weekYear').textContent=sun.getFullYear();const container=document.getElementById('daysContainer');const od={};container.querySelectorAll('.day-card.open').forEach(c=>{od[c.dataset.ds]=true;});container.innerHTML='';for(let i=0;i<7;i++){const day=new Date(base);day.setDate(day.getDate()+i);const ds=iso(day),isT=ds===iso(today),isP=day<today;const entries=data[sk(ds)]?.entries?Object.entries(data[sk(ds)].entries):[];entries.sort((a,b)=>a[0].localeCompare(b[0]));const n=entries.length;const eHTML=n===0?'<div class="empty-msg">Rien encore\u2026 \u2728</div>':entries.map(([id,e])=>'<div class="entry"><span class="entry-dot">\u25c6</span><div class="entry-content"><div class="entry-text">'+esc(e.text)+'</div>'+(e.time?'<div class="entry-meta">\u23f1 '+e.time+'</div>':'')+'</div><button class="del-btn" data-ds="'+ds+'" data-id="'+id+'">\u2715</button></div>').join('');const card=document.createElement('div');card.className='day-card'+(isT?' today':'')+(isP?' past':'')+(isT||od[ds]?' open':'');card.dataset.ds=ds;const pill=isT?'<span class="today-pill">Aujourd&#39;hui</span>':'';const cnt=n===0?'Rien not\u00e9':n===1?'1 livraison':n+' livraisons';card.innerHTML='<div class="day-head"><div class="day-num-wrap"><div class="day-abbr">'+FS[day.getDay()]+'</div><div class="day-num">'+day.getDate()+'</div></div><div class="day-info"><div class="day-fullname">'+FD[day.getDay()]+'</div>'+pill+'<div class="entry-count'+(n?' has-entries':'')+'">'+cnt+'</div></div><span class="chevron">&#8250;</span></div><div class="day-body"><div class="day-body-inner"><div class="entries">'+eHTML+'</div><div class="input-row"><input class="day-input" id="inp-'+ds+'" type="text" placeholder="Ex: Paris 11e, 14h30" maxlength="140" inputmode="text" autocomplete="off" autocorrect="off" spellcheck="false"><button class="add-btn" data-ds="'+ds+'">+</button></div></div></div>';card.querySelector('.day-head').addEventListener('click',()=>card.classList.toggle('open'));card.querySelector('.add-btn').addEventListener('click',()=>add(ds));card.querySelector('.day-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();add(ds);}});card.querySelectorAll('.del-btn').forEach(b=>b.addEventListener('click',()=>del(b.dataset.ds,b.dataset.id)));container.appendChild(card);}}
 let tt;function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2200);}
+/* STATUT FIREBASE */
+window._fbStatutSave=async function(statut,ts){
+  try{await set(ref(db,'statut'),{statut:statut,ts:ts});}catch(e){}
+};
+window._fbStatutListen=function(cb){
+  onValue(ref(db,'statut'),function(s){cb(s.val());});
+};
+
 /* RB FIREBASE */
 const rbRef=ref(db,'redbull_carnet');
 onValue(rbRef,snap=>{const val=snap.val()||'';const ta=document.getElementById('rbTextarea');if(ta&&document.activeElement!==ta)ta.value=val;});
@@ -778,6 +821,54 @@ function initPhotoSection(){
   photoOverlay.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 }
 
+/* STATUT */
+function initStatut(){
+  var btns=document.querySelectorAll('.status-btn');
+  var bubble=document.getElementById('statusBubble');
+  var emojiEl=document.getElementById('statusEmoji');
+  var textEl=document.getElementById('statusText');
+  var updatedEl=document.getElementById('statusUpdated');
+  if(!bubble) return;
+
+  var STATUTS={
+    livraison:{emoji:'🚗',label:'En livraison',cls:'livraison'},
+    pause:{emoji:'☕',label:'En pause',cls:'pause'},
+    rentre:{emoji:'🏠',label:'Rentré',cls:'rentre'},
+    inconnu:{emoji:'❓',label:'Statut inconnu',cls:'inconnu'}
+  };
+
+  function applyStatus(s, time){
+    var info=STATUTS[s]||STATUTS.inconnu;
+    bubble.className='status-bubble '+info.cls;
+    emojiEl.textContent=info.emoji;
+    textEl.textContent=info.label;
+    btns.forEach(function(b){
+      b.classList.toggle('active', b.dataset.status===s);
+    });
+    if(time){
+      var d=new Date(time);
+      var hh=d.getHours().toString().padStart(2,'0');
+      var mm=d.getMinutes().toString().padStart(2,'0');
+      updatedEl.textContent='Mis à jour à '+hh+'h'+mm;
+    }
+  }
+
+  /* Lire depuis Firebase en temps réel */
+  if(window._fbStatutListen) window._fbStatutListen(function(data){
+    if(data) applyStatus(data.statut, data.ts);
+    else applyStatus('inconnu');
+  });
+
+  /* Boutons */
+  btns.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var s=btn.dataset.status;
+      applyStatus(s, Date.now());
+      if(window._fbStatutSave) window._fbStatutSave(s, Date.now());
+    });
+  });
+}
+
 /* COMPTEUR */
 function initCounter(){
   var start=new Date(2024,3,27); // 27 avril 2024 (mois 0-indexed)
@@ -794,7 +885,7 @@ function initCounter(){
   },30);
 }
 
-window.addEventListener('DOMContentLoaded',function(){initRbCarnet();initPhotoSection();initCounter();});
+window.addEventListener('DOMContentLoaded',function(){initRbCarnet();initPhotoSection();initCounter();initStatut();});
 </script>
 </body>
 </html>
