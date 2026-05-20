@@ -6,18 +6,14 @@
 <meta name="theme-color" content="#e8758a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>💌 Mes Livraisons</title>
+<title>&#128140; Mes Livraisons</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Lato:wght@300;400&display=swap');
 :root{--rose:#e8758a;--rose-light:#fce8ef;--gold:#c9973a;--mauve:#b5728a;--dark:#2d1a22;--cream:#fdf7f2;--white:#fff;--grey:#999;--border:rgba(232,117,138,0.25);}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;}
 body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color:var(--dark);min-height:100vh;padding-bottom:40px;overflow-x:hidden;}
-
-/* Canvas plein écran avec fond noir visible */
 #fw{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;background:#1a0812;}
-
-/* LOGIN par-dessus le canvas */
 #loginScreen{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;}
 .login-emoji{font-size:52px;margin-bottom:14px;display:block;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 0 18px rgba(244,167,185,0.8));}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
@@ -33,8 +29,6 @@ body{font-family:'Lato',sans-serif;font-weight:300;background:var(--cream);color
 .login-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--rose),var(--mauve));border:none;border-radius:30px;color:white;font-family:'Playfair Display',serif;font-size:1.05rem;font-style:italic;cursor:pointer;box-shadow:0 4px 16px rgba(232,117,138,0.4);-webkit-appearance:none;}
 .login-btn:active{opacity:0.85;}
 .login-footer{margin-top:22px;text-align:center;color:rgba(255,200,220,0.6);font-style:italic;font-size:0.8rem;}
-
-/* APP */
 #app{display:none;}
 .header{background:linear-gradient(160deg,#f9dde6 0%,#fceee4 60%,#f5e8f5 100%);padding:48px 24px 32px;text-align:center;position:relative;overflow:hidden;}
 .header::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(232,117,138,0.2),transparent 70%);}
@@ -50,59 +44,10 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
 .logout-btn{background:rgba(255,255,255,0.6);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:0.75rem;color:var(--mauve);cursor:pointer;font-style:italic;-webkit-appearance:none;}
 .gift-btn{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#e8a020);border:none;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 10px rgba(212,168,67,0.4);-webkit-appearance:none;animation:giftpulse 2.5s ease-in-out infinite;}
 @keyframes giftpulse{0%,100%{transform:scale(1);box-shadow:0 2px 10px rgba(212,168,67,0.4)}50%{transform:scale(1.12);box-shadow:0 4px 18px rgba(212,168,67,0.7)}}
-.msg-overlay{position:fixed;inset:0;z-index:9000;background:rgba(45,26,34,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity 0.3s;}
-.msg-overlay.open{opacity:1;pointer-events:all;}
-
-/* Enveloppe */
-.envelope-wrap{perspective:600px;margin-bottom:20px;cursor:pointer;user-select:none;}
-.envelope{width:120px;height:85px;margin:0 auto;position:relative;transform-style:preserve-3d;}
-/* Corps */
-.env-body{position:absolute;inset:0;background:linear-gradient(135deg,#fce8ef,#fdf3e0);border-radius:4px 4px 8px 8px;border:1.5px solid rgba(232,117,138,0.35);box-shadow:0 4px 20px rgba(232,117,138,0.2);}
-/* Flap fermé */
-.env-flap{position:absolute;top:0;left:0;right:0;height:52px;background:linear-gradient(160deg,#f9dde6,#fce8ef);border-radius:4px 4px 0 0;transform-origin:top center;clip-path:polygon(0 0,100% 0,50% 100%);border:1.5px solid rgba(232,117,138,0.3);transition:transform 0.6s cubic-bezier(.4,0,.2,1);z-index:3;}
-.envelope.open .env-flap{transform:rotateX(-180deg);}
-/* Triangle bas */
-.env-bottom{position:absolute;bottom:0;left:0;right:0;height:52px;background:linear-gradient(to top,#fce8ef,#fdf6ee);clip-path:polygon(0 100%,100% 100%,50% 0);border-radius:0 0 8px 8px;z-index:1;}
-/* Triangles côtés */
-.env-left{position:absolute;top:0;bottom:0;left:0;width:60px;background:linear-gradient(to right,#fceef4,#fce8ef);clip-path:polygon(0 0,0 100%,100% 50%);z-index:2;}
-.env-right{position:absolute;top:0;bottom:0;right:0;width:60px;background:linear-gradient(to left,#fceef4,#fce8ef);clip-path:polygon(100% 0,100% 100%,0 50%);z-index:2;}
-/* Lettre qui sort */
-.env-letter{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);width:88px;background:white;border-radius:4px;padding:6px 8px;font-family:'Playfair Display',serif;font-size:0.5rem;color:var(--rose);text-align:center;line-height:1.4;border:1px solid rgba(232,117,138,0.2);box-shadow:0 2px 8px rgba(232,117,138,0.15);transition:transform 0.6s 0.2s cubic-bezier(.4,0,.2,1);z-index:0;transform:translateX(-50%) translateY(0);}
-.envelope.open .env-letter{transform:translateX(-50%) translateY(-40px);}
-/* Sceau coeur */
-.env-seal{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:18px;z-index:4;transition:opacity 0.3s;}
-.envelope.open .env-seal{opacity:0;}
-
-/* Carte message (cachée au début) */
-.msg-card{background:white;border-radius:28px;padding:28px 28px 28px;max-width:320px;width:100%;text-align:center;box-shadow:0 16px 60px rgba(232,117,138,0.25);border:1px solid var(--border);transform:scale(0.9);transition:transform 0.3s;position:relative;display:flex;flex-direction:column;align-items:center;}
-.msg-overlay.open .msg-card{transform:scale(1);}
-.msg-card-content{opacity:0;transform:translateY(10px);transition:opacity 0.5s 0.5s, transform 0.5s 0.5s;pointer-events:none;}
-.msg-card-content.revealed{opacity:1;transform:translateY(0);pointer-events:all;}
-.msg-card-emoji{font-size:44px;display:block;margin-bottom:12px;animation:float 3s ease-in-out infinite;}
-.msg-card-date{font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--mauve);margin-bottom:14px;}
-.msg-card-text{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--dark);line-height:1.6;font-style:italic;margin-bottom:20px;}
-.msg-card-close{background:linear-gradient(135deg,var(--rose),var(--mauve));border:none;border-radius:30px;color:white;padding:10px 28px;font-family:'Playfair Display',serif;font-size:0.9rem;cursor:pointer;-webkit-appearance:none;}
-.env-hint{font-size:0.72rem;color:var(--mauve);font-style:italic;margin-top:8px;animation:pulse-hint 2s infinite;}
-@keyframes pulse-hint{0%,100%{opacity:0.6}50%{opacity:1}}
+.photo-btn{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#e91e8c,#c2185b);border:none;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 10px rgba(233,30,140,0.4);-webkit-appearance:none;}
+.photo-btn:active{opacity:0.85;}
 .rb-btn{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #4fc3f7;border-radius:20px;padding:6px 12px;font-size:0.72rem;color:#4fc3f7;cursor:pointer;font-weight:700;letter-spacing:0.5px;-webkit-appearance:none;white-space:nowrap;box-shadow:0 2px 10px rgba(79,195,247,0.3);}
 .rb-btn:active{opacity:0.8;}
-
-/* CARNET REDBULL */
-.rb-overlay{position:fixed;inset:0;z-index:9001;background:rgba(10,5,20,0.92);backdrop-filter:blur(6px);display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.3s;}
-.rb-overlay.open{opacity:1;pointer-events:all;}
-.rb-header{background:linear-gradient(135deg,#1a1a2e,#0d0d1a);padding:20px 20px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(79,195,247,0.2);}
-.rb-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:#4fc3f7;display:flex;align-items:center;gap:10px;}
-.rb-title span{font-size:1.4rem;}
-.rb-close{background:rgba(79,195,247,0.1);border:1px solid rgba(79,195,247,0.3);border-radius:20px;color:#4fc3f7;padding:6px 16px;font-size:0.8rem;cursor:pointer;-webkit-appearance:none;}
-.rb-body{flex:1;display:flex;flex-direction:column;padding:16px;gap:12px;overflow:hidden;}
-.rb-textarea{flex:1;background:rgba(255,255,255,0.04);border:1.5px solid rgba(79,195,247,0.2);border-radius:16px;padding:16px;color:#e8f4f8;font-family:'Lato',sans-serif;font-size:0.95rem;line-height:1.7;resize:none;outline:none;-webkit-appearance:none;}
-.rb-textarea:focus{border-color:rgba(79,195,247,0.5);}
-.rb-textarea::placeholder{color:rgba(255,255,255,0.2);font-style:italic;}
-.rb-actions{display:flex;gap:10px;align-items:center;}
-.rb-save{flex:1;background:linear-gradient(135deg,#4fc3f7,#0288d1);border:none;border-radius:24px;color:white;padding:13px;font-family:'Playfair Display',serif;font-size:0.95rem;cursor:pointer;-webkit-appearance:none;box-shadow:0 3px 12px rgba(79,195,247,0.3);}
-.rb-save:active{opacity:0.85;}
-.rb-saved-msg{font-size:0.75rem;color:#4fc3f7;font-style:italic;opacity:0;transition:opacity 0.3s;}
-.rb-saved-msg.show{opacity:1;}
 .sync-bar{background:white;border-bottom:1px solid var(--border);padding:8px 20px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:0.78rem;color:var(--grey);}
 .sync-dot{width:8px;height:8px;border-radius:50%;background:#ccc;transition:background 0.4s;flex-shrink:0;}
 .sync-dot.connected{background:#4caf50;}.sync-dot.syncing{background:var(--gold);animation:pdot 1s infinite;}.sync-dot.error{background:#e74c3c;}
@@ -156,64 +101,123 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
 @keyframes hb{0%,100%{transform:scale(1)}25%{transform:scale(1.15)}50%{transform:scale(1)}}
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dark);color:white;padding:10px 22px;border-radius:30px;font-size:0.85rem;z-index:9999;opacity:0;transition:all 0.3s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.2);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* MSG OVERLAY */
+.msg-overlay{position:fixed;inset:0;z-index:9000;background:rgba(45,26,34,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.msg-overlay.open{opacity:1;pointer-events:all;}
+.envelope-wrap{perspective:600px;margin-bottom:20px;cursor:pointer;user-select:none;}
+.envelope{width:120px;height:85px;margin:0 auto;position:relative;transform-style:preserve-3d;}
+.env-body{position:absolute;inset:0;background:linear-gradient(135deg,#fce8ef,#fdf3e0);border-radius:4px 4px 8px 8px;border:1.5px solid rgba(232,117,138,0.35);box-shadow:0 4px 20px rgba(232,117,138,0.2);}
+.env-flap{position:absolute;top:0;left:0;right:0;height:52px;background:linear-gradient(160deg,#f9dde6,#fce8ef);border-radius:4px 4px 0 0;transform-origin:top center;clip-path:polygon(0 0,100% 0,50% 100%);border:1.5px solid rgba(232,117,138,0.3);transition:transform 0.6s cubic-bezier(.4,0,.2,1);z-index:3;}
+.envelope.open .env-flap{transform:rotateX(-180deg);}
+.env-bottom{position:absolute;bottom:0;left:0;right:0;height:52px;background:linear-gradient(to top,#fce8ef,#fdf6ee);clip-path:polygon(0 100%,100% 100%,50% 0);border-radius:0 0 8px 8px;z-index:1;}
+.env-left{position:absolute;top:0;bottom:0;left:0;width:60px;background:linear-gradient(to right,#fceef4,#fce8ef);clip-path:polygon(0 0,0 100%,100% 50%);z-index:2;}
+.env-right{position:absolute;top:0;bottom:0;right:0;width:60px;background:linear-gradient(to left,#fceef4,#fce8ef);clip-path:polygon(100% 0,100% 100%,0 50%);z-index:2;}
+.env-letter{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);width:88px;background:white;border-radius:4px;padding:6px 8px;font-family:'Playfair Display',serif;font-size:0.5rem;color:var(--rose);text-align:center;line-height:1.4;border:1px solid rgba(232,117,138,0.2);box-shadow:0 2px 8px rgba(232,117,138,0.15);transition:transform 0.6s 0.2s cubic-bezier(.4,0,.2,1);z-index:0;}
+.envelope.open .env-letter{transform:translateX(-50%) translateY(-40px);}
+.env-seal{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:18px;z-index:4;transition:opacity 0.3s;}
+.envelope.open .env-seal{opacity:0;}
+.msg-card{background:white;border-radius:28px;padding:28px;max-width:320px;width:100%;text-align:center;box-shadow:0 16px 60px rgba(232,117,138,0.25);border:1px solid var(--border);transform:scale(0.9);transition:transform 0.3s;display:flex;flex-direction:column;align-items:center;}
+.msg-overlay.open .msg-card{transform:scale(1);}
+.msg-card-content{opacity:0;transform:translateY(10px);transition:opacity 0.5s 0.5s,transform 0.5s 0.5s;pointer-events:none;}
+.msg-card-content.revealed{opacity:1;transform:translateY(0);pointer-events:all;}
+.msg-card-emoji{font-size:44px;display:block;margin-bottom:12px;animation:float 3s ease-in-out infinite;}
+.msg-card-date{font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--mauve);margin-bottom:14px;}
+.msg-card-text{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--dark);line-height:1.6;font-style:italic;margin-bottom:20px;}
+.msg-card-close{background:linear-gradient(135deg,var(--rose),var(--mauve));border:none;border-radius:30px;color:white;padding:10px 28px;font-family:'Playfair Display',serif;font-size:0.9rem;cursor:pointer;-webkit-appearance:none;}
+.env-hint{font-size:0.72rem;color:var(--mauve);font-style:italic;margin-top:8px;}
+/* RB OVERLAY */
+.rb-overlay{position:fixed;inset:0;z-index:9001;background:rgba(10,5,20,0.92);backdrop-filter:blur(6px);display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.rb-overlay.open{opacity:1;pointer-events:all;}
+.rb-header{background:linear-gradient(135deg,#1a1a2e,#0d0d1a);padding:20px 20px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(79,195,247,0.2);}
+.rb-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:#4fc3f7;display:flex;align-items:center;gap:10px;}
+.rb-close{background:rgba(79,195,247,0.1);border:1px solid rgba(79,195,247,0.3);border-radius:20px;color:#4fc3f7;padding:6px 16px;font-size:0.8rem;cursor:pointer;-webkit-appearance:none;}
+.rb-body{flex:1;display:flex;flex-direction:column;padding:16px;gap:12px;overflow:hidden;}
+.rb-textarea{flex:1;background:rgba(255,255,255,0.04);border:1.5px solid rgba(79,195,247,0.2);border-radius:16px;padding:16px;color:#e8f4f8;font-family:'Lato',sans-serif;font-size:0.95rem;line-height:1.7;resize:none;outline:none;-webkit-appearance:none;}
+.rb-textarea:focus{border-color:rgba(79,195,247,0.5);}
+.rb-textarea::placeholder{color:rgba(255,255,255,0.2);font-style:italic;}
+.rb-actions{display:flex;gap:10px;align-items:center;}
+.rb-save{flex:1;background:linear-gradient(135deg,#4fc3f7,#0288d1);border:none;border-radius:24px;color:white;padding:13px;font-family:'Playfair Display',serif;font-size:0.95rem;cursor:pointer;-webkit-appearance:none;}
+.rb-saved-msg{font-size:0.75rem;color:#4fc3f7;font-style:italic;opacity:0;transition:opacity 0.3s;}
+.rb-saved-msg.show{opacity:1;}
+/* PHOTO OVERLAY */
+.photo-overlay{position:fixed;inset:0;z-index:9002;background:rgba(20,5,20,0.95);backdrop-filter:blur(8px);display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.photo-overlay.open{opacity:1;pointer-events:all;}
+.photo-header{background:linear-gradient(135deg,#880e4f,#c2185b);padding:18px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.photo-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:white;font-style:italic;}
+.photo-subtitle{font-size:0.7rem;color:rgba(255,255,255,0.7);margin-top:3px;}
+.photo-close-btn{background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);border-radius:20px;color:white;padding:6px 16px;font-size:0.8rem;cursor:pointer;-webkit-appearance:none;}
+.photo-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;}
+.photo-date-label{font-family:'Playfair Display',serif;text-align:center;color:rgba(255,255,255,0.5);font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;}
+.photo-slots{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.photo-slot{border-radius:16px;overflow:hidden;position:relative;aspect-ratio:1;background:rgba(255,255,255,0.05);border:2px dashed rgba(233,30,140,0.3);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;}
+.photo-slot.has-photo{border:2px solid rgba(233,30,140,0.5);}
+.photo-slot img{width:100%;height:100%;object-fit:cover;border-radius:14px;}
+.photo-slot-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,0.7),transparent);color:white;font-size:0.65rem;padding:8px 6px 6px;text-align:center;font-style:italic;}
+.photo-slot-icon{font-size:28px;margin-bottom:6px;opacity:0.5;}
+.photo-slot-text{font-size:0.7rem;color:rgba(255,255,255,0.4);font-style:italic;}
+.photo-upload-input{display:none;}
+.photo-uploading{position:absolute;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;border-radius:14px;font-size:0.75rem;color:white;font-style:italic;}
+.photo-history-title{font-family:'Playfair Display',serif;color:rgba(255,255,255,0.6);font-size:0.82rem;margin-bottom:10px;text-align:center;letter-spacing:1px;}
+.photo-history-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.photo-history-item{aspect-ratio:1;border-radius:10px;overflow:hidden;position:relative;}
+.photo-history-item img{width:100%;height:100%;object-fit:cover;}
+.photo-history-date{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.6);color:rgba(255,255,255,0.8);font-size:0.55rem;padding:3px;text-align:center;}
 </style>
 </head>
 <body>
-
 <canvas id="fw"></canvas>
-
 <div id="loginScreen">
-  <span class="login-emoji">💌</span>
+  <span class="login-emoji">&#128140;</span>
   <div class="login-title">Mes Livraisons</div>
-  <div class="login-sub">Pour toi, ma chérie ✨</div>
+  <div class="login-sub">Pour toi, ma ch&#233;rie &#10024;</div>
   <div class="login-card">
-    <label class="login-label">Code secret 🔑</label>
-    <input class="code-input" id="codeInput" type="password" inputmode="numeric"
-           maxlength="6" autocomplete="off" placeholder="••••••">
+    <label class="login-label">Code secret &#128273;</label>
+    <input class="code-input" id="codeInput" type="password" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;">
     <div class="login-hint" id="loginHint"></div>
-    <button class="login-btn" id="loginBtn">Entrer ✨</button>
+    <button class="login-btn" id="loginBtn">Entrer &#10024;</button>
   </div>
-  <div class="login-footer">Pour toi et moi seulement 🌹</div>
+  <div class="login-footer">Pour toi et moi seulement &#127801;</div>
 </div>
-
 <div id="app">
   <div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-rose">🌹</div>
-    <div class="loading-text">Connexion en cours…</div>
+    <div class="loading-rose">&#127801;</div>
+    <div class="loading-text">Connexion en cours&#8230;</div>
   </div>
   <div class="header">
     <div class="header-actions">
-      <button class="gift-btn" id="giftBtn">🎁</button>
-      <button class="rb-btn" id="rbBtn">🐂 RedBull</button>
-      <button class="logout-btn" id="logoutBtn">🔒 Verrouiller</button>
+      <button class="photo-btn" id="photoBtn">&#128248;</button>
+      <button class="gift-btn" id="giftBtn">&#127873;</button>
+      <button class="rb-btn" id="rbBtn">&#128002; RedBull</button>
+      <button class="logout-btn" id="logoutBtn">&#128274; Verrouiller</button>
     </div>
-    <span class="header-emoji">🚗</span>
+    <span class="header-emoji">&#128663;</span>
     <h1>Mes Livraisons <span>du Jour</span></h1>
-    <p class="header-sub">Pour que tu saches où je suis, ma chérie 💌</p>
-    <div class="deco-line"><span class="deco-diamond">◆</span></div>
+    <p class="header-sub">Pour que tu saches o&#249; je suis, ma ch&#233;rie &#128140;</p>
+    <div class="deco-line"><span class="deco-diamond">&#9670;</span></div>
   </div>
   <div class="sync-bar">
     <div class="sync-dot" id="syncDot"></div>
-    <span id="syncLabel">Connexion…</span>
+    <span id="syncLabel">Connexion&#8230;</span>
   </div>
   <div class="week-nav">
-    <button class="nav-btn" id="btnPrev">‹</button>
+    <button class="nav-btn" id="btnPrev">&#8249;</button>
     <div class="week-info">
-      <div class="week-range" id="weekRange">—</div>
+      <div class="week-range" id="weekRange">&#8212;</div>
       <div class="week-year" id="weekYear"></div>
     </div>
-    <button class="nav-btn" id="btnNext">›</button>
+    <button class="nav-btn" id="btnNext">&#8250;</button>
   </div>
   <div class="days-container" id="daysContainer"></div>
   <div class="footer">
-    <span class="footer-rose">🌹</span>
-    Chaque colis livré, je pense à toi ✨
+    <span class="footer-rose">&#127801;</span>
+    Chaque colis livr&#233;, je pense &#224; toi &#10024;
   </div>
 </div>
 <div class="toast" id="toast"></div>
+
+<!-- MSG OVERLAY -->
 <div class="msg-overlay" id="msgOverlay">
   <div class="msg-card">
-    <!-- Enveloppe animée -->
     <div class="envelope-wrap" id="envelopeWrap">
       <div class="envelope" id="envelope">
         <div class="env-body"></div>
@@ -221,283 +225,115 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
         <div class="env-bottom"></div>
         <div class="env-left"></div>
         <div class="env-right"></div>
-        <div class="env-letter">💌<br>Pour toi</div>
-        <div class="env-seal">💗</div>
+        <div class="env-letter">&#128140;<br>Pour toi</div>
+        <div class="env-seal">&#128151;</div>
       </div>
-      <div class="env-hint" id="envHint">Appuie pour ouvrir ✨</div>
+      <div class="env-hint" id="envHint">Appuie pour ouvrir &#10024;</div>
     </div>
-    <!-- Contenu caché au début -->
     <div class="msg-card-content" id="msgContent">
-      <span class="msg-card-emoji" id="msgEmoji">🌸</span>
+      <span class="msg-card-emoji" id="msgEmoji">&#127800;</span>
       <div class="msg-card-date" id="msgDate"></div>
       <div class="msg-card-text" id="msgText"></div>
-      <button class="msg-card-close" id="msgClose">Merci 💌</button>
+      <button class="msg-card-close" id="msgClose">Merci &#128140;</button>
     </div>
   </div>
 </div>
 
+<!-- RB OVERLAY -->
 <div class="rb-overlay" id="rbOverlay">
   <div class="rb-header">
-    <div class="rb-title"><span>🐂</span> Mon Carnet RedBull</div>
-    <button class="rb-close" id="rbClose">✕ Fermer</button>
+    <div class="rb-title"><span>&#128002;</span> Mon Carnet RedBull</div>
+    <button class="rb-close" id="rbClose">&#10005; Fermer</button>
   </div>
   <div class="rb-body">
-    <textarea class="rb-textarea" id="rbTextarea" placeholder="Écris tout ce que tu veux ici… notes, idées, listes, pensées du jour… 🐂✨"></textarea>
+    <textarea class="rb-textarea" id="rbTextarea" placeholder="Ecris tout ce que tu veux ici... notes, id&#233;es, listes, pens&#233;es... &#128002;&#10024;"></textarea>
     <div class="rb-actions">
-      <button class="rb-save" id="rbSave">💾 Sauvegarder</button>
-      <span class="rb-saved-msg" id="rbSavedMsg">Sauvegardé ✓</span>
+      <button class="rb-save" id="rbSave">&#128190; Sauvegarder</button>
+      <span class="rb-saved-msg" id="rbSavedMsg">Sauvegard&#233; &#10003;</span>
     </div>
+  </div>
+</div>
+
+<!-- PHOTO OVERLAY -->
+<div class="photo-overlay" id="photoOverlay">
+  <div class="photo-header">
+    <div>
+      <div class="photo-title">&#128248; Photo du Jour</div>
+      <div class="photo-subtitle">Un souvenir &#224; deux chaque jour &#128145;</div>
+    </div>
+    <button class="photo-close-btn" id="photoClose">&#10005; Fermer</button>
+  </div>
+  <div class="photo-body">
+    <div class="photo-date-label" id="photoDateLabel"></div>
+    <div class="photo-slots">
+      <div class="photo-slot" id="slotMoi">
+        <div class="photo-slot-icon">&#128663;</div>
+        <div class="photo-slot-text">Ma photo du jour</div>
+        <input class="photo-upload-input" id="uploadMoi" type="file" accept="image/*">
+      </div>
+      <div class="photo-slot" id="slotElle">
+        <div class="photo-slot-icon">&#128140;</div>
+        <div class="photo-slot-text">Sa photo du jour</div>
+        <input class="photo-upload-input" id="uploadElle" type="file" accept="image/*">
+      </div>
+    </div>
+    <div id="photoHistory"></div>
   </div>
 </div>
 
 <script>
-/* ═══════════════════════════
-   FEUX D'ARTIFICE — fleurs + coeurs + vagues
-═══════════════════════════ */
+/* FEUX D'ARTIFICE */
 (function(){
-  var cv=document.getElementById('fw');
-  var cx=cv.getContext('2d');
-  var alive=true;
-
-  window._stopFw=function(){
-    alive=false;
-    /* on cache le canvas et on retire le fond noir */
-    cv.style.display='none';
-  };
-
-  function resize(){ cv.width=window.innerWidth; cv.height=window.innerHeight; }
-  resize();
-  window.addEventListener('resize',resize);
-
-  var COLS=['#f4a7b9','#e8758a','#d4a843','#f0d080','#c9829a',
-            '#ff85a1','#ffd700','#ff69b4','#ffb347','#ee82ee','#ff4d6d','#fff0f5'];
-
-  var parts=[],rocks=[],floaters=[];
-  var nxtR=0,nxtF=0,tick=0;
-
-  /* FLEUR */
-  function Flower(x,y,col){
-    var a=Math.random()*Math.PI*2,sp=1.8+Math.random()*5;
-    this.x=x;this.y=y;this.col=col;
-    this.vx=Math.cos(a)*sp;this.vy=Math.sin(a)*sp;
-    this.al=1;this.dc=0.009+Math.random()*0.009;
-    this.sz=3+Math.random()*5;this.np=5+Math.floor(Math.random()*4);
-    this.r=Math.random()*Math.PI*2;this.rv=(Math.random()-.5)*0.13;this.g=0.05;
-  }
-  Flower.prototype.step=function(){
-    this.vx*=0.98;this.vy=this.vy*0.98+this.g;
-    this.x+=this.vx;this.y+=this.vy;this.r+=this.rv;this.al-=this.dc;
-  };
-  Flower.prototype.draw=function(){
-    if(this.al<=0)return;
-    cx.save();cx.globalAlpha=this.al;cx.translate(this.x,this.y);cx.rotate(this.r);
-    cx.beginPath();
-    for(var i=0;i<this.np;i++){
-      var a=(i/this.np)*Math.PI*2,b=((i+.5)/this.np)*Math.PI*2;
-      cx.lineTo(Math.cos(a)*this.sz,Math.sin(a)*this.sz);
-      cx.lineTo(Math.cos(b)*this.sz*.32,Math.sin(b)*this.sz*.32);
-    }
-    cx.closePath();
-    cx.fillStyle=this.col;cx.shadowColor=this.col;cx.shadowBlur=14;cx.fill();
-    cx.beginPath();cx.arc(0,0,this.sz*.22,0,Math.PI*2);
-    cx.fillStyle='rgba(255,255,255,0.9)';cx.shadowBlur=4;cx.fill();
-    cx.restore();
-  };
+  var cv=document.getElementById('fw'),cx=cv.getContext('2d'),alive=true;
+  window._stopFw=function(){alive=false;cv.style.display='none';};
+  function resize(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  var C=['#f4a7b9','#e8758a','#d4a843','#f0d080','#c9829a','#ff85a1','#ffd700','#ff69b4','#ffb347','#ee82ee','#ff4d6d','#fff0f5'];
+  var parts=[],rocks=[],floaters=[],nxtR=0,nxtF=0,tick=0;
+  function Flower(x,y,col){var a=Math.random()*Math.PI*2,sp=1.8+Math.random()*5;this.x=x;this.y=y;this.col=col;this.vx=Math.cos(a)*sp;this.vy=Math.sin(a)*sp;this.al=1;this.dc=0.009+Math.random()*0.009;this.sz=3+Math.random()*5;this.np=5+Math.floor(Math.random()*4);this.r=Math.random()*Math.PI*2;this.rv=(Math.random()-.5)*0.13;this.g=0.05;}
+  Flower.prototype.step=function(){this.vx*=0.98;this.vy=this.vy*0.98+this.g;this.x+=this.vx;this.y+=this.vy;this.r+=this.rv;this.al-=this.dc;};
+  Flower.prototype.draw=function(){if(this.al<=0)return;cx.save();cx.globalAlpha=this.al;cx.translate(this.x,this.y);cx.rotate(this.r);cx.beginPath();for(var i=0;i<this.np;i++){var a=(i/this.np)*Math.PI*2,b=((i+.5)/this.np)*Math.PI*2;cx.lineTo(Math.cos(a)*this.sz,Math.sin(a)*this.sz);cx.lineTo(Math.cos(b)*this.sz*.32,Math.sin(b)*this.sz*.32);}cx.closePath();cx.fillStyle=this.col;cx.shadowColor=this.col;cx.shadowBlur=14;cx.fill();cx.beginPath();cx.arc(0,0,this.sz*.22,0,Math.PI*2);cx.fillStyle='rgba(255,255,255,0.9)';cx.shadowBlur=4;cx.fill();cx.restore();};
   Flower.prototype.dead=function(){return this.al<=0;};
-
-  /* COEUR */
-  function Heart(x,y,col){
-    var a=Math.random()*Math.PI*2,sp=1.5+Math.random()*4.5;
-    this.x=x;this.y=y;this.col=col;
-    this.vx=Math.cos(a)*sp;this.vy=Math.sin(a)*sp;
-    this.al=1;this.dc=0.008+Math.random()*0.008;
-    this.sz=4+Math.random()*5;
-    this.r=Math.random()*Math.PI*2;this.rv=(Math.random()-.5)*0.08;this.g=0.04;
-  }
-  Heart.prototype.step=function(){
-    this.vx*=0.98;this.vy=this.vy*0.98+this.g;
-    this.x+=this.vx;this.y+=this.vy;this.r+=this.rv;this.al-=this.dc;
-  };
-  Heart.prototype.draw=function(){
-    if(this.al<=0)return;
-    var s=this.sz;
-    cx.save();cx.globalAlpha=this.al;cx.translate(this.x,this.y);cx.rotate(this.r);
-    cx.beginPath();
-    cx.moveTo(0,s*.3);
-    cx.bezierCurveTo(s*.8,-s*.5,s*1.6,s*.5,0,s*1.4);
-    cx.bezierCurveTo(-s*1.6,s*.5,-s*.8,-s*.5,0,s*.3);
-    cx.closePath();
-    cx.fillStyle=this.col;cx.shadowColor=this.col;cx.shadowBlur=16;cx.fill();
-    cx.restore();
-  };
+  function Heart(x,y,col){var a=Math.random()*Math.PI*2,sp=1.5+Math.random()*4.5;this.x=x;this.y=y;this.col=col;this.vx=Math.cos(a)*sp;this.vy=Math.sin(a)*sp;this.al=1;this.dc=0.008+Math.random()*0.008;this.sz=4+Math.random()*5;this.r=Math.random()*Math.PI*2;this.rv=(Math.random()-.5)*0.08;this.g=0.04;}
+  Heart.prototype.step=function(){this.vx*=0.98;this.vy=this.vy*0.98+this.g;this.x+=this.vx;this.y+=this.vy;this.r+=this.rv;this.al-=this.dc;};
+  Heart.prototype.draw=function(){if(this.al<=0)return;var s=this.sz;cx.save();cx.globalAlpha=this.al;cx.translate(this.x,this.y);cx.rotate(this.r);cx.beginPath();cx.moveTo(0,s*.3);cx.bezierCurveTo(s*.8,-s*.5,s*1.6,s*.5,0,s*1.4);cx.bezierCurveTo(-s*1.6,s*.5,-s*.8,-s*.5,0,s*.3);cx.closePath();cx.fillStyle=this.col;cx.shadowColor=this.col;cx.shadowBlur=16;cx.fill();cx.restore();};
   Heart.prototype.dead=function(){return this.al<=0;};
-
-  /* FUSEE */
-  function Rocket(){
-    this.x=cv.width*(0.1+Math.random()*0.8);this.y=cv.height;
-    var tx=cv.width*(0.1+Math.random()*0.8),ty=cv.height*(0.08+Math.random()*0.42);
-    var dx=tx-this.x,dy=ty-this.y,d=Math.sqrt(dx*dx+dy*dy),sp=8+Math.random()*6;
-    this.vx=(dx/d)*sp;this.vy=(dy/d)*sp;
-    this.tx=tx;this.ty=ty;
-    this.col=COLS[Math.floor(Math.random()*COLS.length)];
-    this.trail=[];this.done=false;
-  }
-  Rocket.prototype.step=function(){
-    this.trail.push({x:this.x,y:this.y});
-    if(this.trail.length>14)this.trail.shift();
-    this.x+=this.vx;this.y+=this.vy;
-    var dx=this.tx-this.x,dy=this.ty-this.y;
-    if(dx*dx+dy*dy<400){this.explode();this.done=true;}
-  };
-  Rocket.prototype.explode=function(){
-    var n=55+Math.floor(Math.random()*45);
-    var c1=COLS[Math.floor(Math.random()*COLS.length)];
-    var c2=COLS[Math.floor(Math.random()*COLS.length)];
-    var hearts=Math.random()<0.45;
-    for(var i=0;i<n;i++){
-      var col=i%2===0?c1:c2;
-      if(hearts&&i<n*.45) parts.push(new Heart(this.x,this.y,col));
-      else parts.push(new Flower(this.x,this.y,col));
-    }
-  };
-  Rocket.prototype.draw=function(){
-    for(var i=0;i<this.trail.length;i++){
-      cx.globalAlpha=(i/this.trail.length)*.6;
-      cx.beginPath();cx.arc(this.trail[i].x,this.trail[i].y,2,0,Math.PI*2);
-      cx.fillStyle=this.col;cx.fill();
-    }
-    cx.globalAlpha=1;
-    cx.beginPath();cx.arc(this.x,this.y,3,0,Math.PI*2);
-    cx.fillStyle='#fff';cx.shadowColor=this.col;cx.shadowBlur=14;cx.fill();cx.shadowBlur=0;
-  };
-
-  /* FLEURS FLOTTANTES */
-  function Floater(){
-    this.x=Math.random()*cv.width;this.y=cv.height+10;
-    this.sz=2+Math.random()*5;this.np=5+Math.floor(Math.random()*3);
-    this.col=COLS[Math.floor(Math.random()*COLS.length)];
-    this.vx=(Math.random()-.5)*.5;this.vy=-(0.3+Math.random()*.7);
-    this.r=Math.random()*Math.PI*2;this.rv=(Math.random()-.5)*.02;
-    this.al=0;this.fin=true;
-  }
-  Floater.prototype.step=function(){
-    this.x+=this.vx;this.y+=this.vy;this.r+=this.rv;
-    if(this.fin){this.al+=0.014;if(this.al>=0.55)this.fin=false;}
-    else{this.al-=0.004;}
-  };
-  Floater.prototype.draw=function(){
-    if(this.al<=0)return;
-    cx.save();cx.globalAlpha=this.al;cx.translate(this.x,this.y);cx.rotate(this.r);
-    cx.beginPath();
-    for(var i=0;i<this.np;i++){
-      var a=(i/this.np)*Math.PI*2,b=((i+.5)/this.np)*Math.PI*2;
-      cx.lineTo(Math.cos(a)*this.sz,Math.sin(a)*this.sz);
-      cx.lineTo(Math.cos(b)*this.sz*.32,Math.sin(b)*this.sz*.32);
-    }
-    cx.closePath();cx.fillStyle=this.col;cx.shadowColor=this.col;cx.shadowBlur=8;cx.fill();
-    cx.restore();
-  };
+  function Rocket(){this.x=cv.width*(0.1+Math.random()*0.8);this.y=cv.height;var tx=cv.width*(0.1+Math.random()*0.8),ty=cv.height*(0.08+Math.random()*0.42);var dx=tx-this.x,dy=ty-this.y,d=Math.sqrt(dx*dx+dy*dy),sp=8+Math.random()*6;this.vx=(dx/d)*sp;this.vy=(dy/d)*sp;this.tx=tx;this.ty=ty;this.c=C[Math.floor(Math.random()*C.length)];this.trail=[];this.done=false;}
+  Rocket.prototype.step=function(){this.trail.push({x:this.x,y:this.y});if(this.trail.length>14)this.trail.shift();this.x+=this.vx;this.y+=this.vy;var dx=this.tx-this.x,dy=this.ty-this.y;if(dx*dx+dy*dy<400){this.explode();this.done=true;}};
+  Rocket.prototype.explode=function(){var n=55+Math.floor(Math.random()*45),c1=C[Math.floor(Math.random()*C.length)],c2=C[Math.floor(Math.random()*C.length)],hearts=Math.random()<0.45;for(var i=0;i<n;i++){var col=i%2===0?c1:c2;if(hearts&&i<n*.45)parts.push(new Heart(this.x,this.y,col));else parts.push(new Flower(this.x,this.y,col));}};
+  Rocket.prototype.draw=function(){for(var i=0;i<this.trail.length;i++){cx.globalAlpha=(i/this.trail.length)*.6;cx.beginPath();cx.arc(this.trail[i].x,this.trail[i].y,2,0,Math.PI*2);cx.fillStyle=this.c;cx.fill();}cx.globalAlpha=1;cx.beginPath();cx.arc(this.x,this.y,3,0,Math.PI*2);cx.fillStyle='#fff';cx.shadowColor=this.c;cx.shadowBlur=14;cx.fill();cx.shadowBlur=0;};
+  function Floater(){this.x=Math.random()*cv.width;this.y=cv.height+10;this.sz=2+Math.random()*5;this.np=5+Math.floor(Math.random()*3);this.col=C[Math.floor(Math.random()*C.length)];this.vx=(Math.random()-.5)*.5;this.vy=-(0.3+Math.random()*.7);this.r=Math.random()*Math.PI*2;this.rv=(Math.random()-.5)*.02;this.al=0;this.fin=true;}
+  Floater.prototype.step=function(){this.x+=this.vx;this.y+=this.vy;this.r+=this.rv;if(this.fin){this.al+=0.014;if(this.al>=0.55)this.fin=false;}else{this.al-=0.004;}};
+  Floater.prototype.draw=function(){if(this.al<=0)return;cx.save();cx.globalAlpha=this.al;cx.translate(this.x,this.y);cx.rotate(this.r);cx.beginPath();for(var i=0;i<this.np;i++){var a=(i/this.np)*Math.PI*2,b=((i+.5)/this.np)*Math.PI*2;cx.lineTo(Math.cos(a)*this.sz,Math.sin(a)*this.sz);cx.lineTo(Math.cos(b)*this.sz*.32,Math.sin(b)*this.sz*.32);}cx.closePath();cx.fillStyle=this.col;cx.shadowColor=this.col;cx.shadowBlur=8;cx.fill();cx.restore();};
   Floater.prototype.dead=function(){return this.al<=0&&!this.fin;};
-
-  /* VAGUES */
-  function drawWaves(){
-    var W=cv.width,H=cv.height;
-    for(var w=0;w<3;w++){
-      cx.save();cx.globalAlpha=0.08+w*0.05;
-      cx.beginPath();cx.moveTo(0,H);
-      for(var x=0;x<=W;x+=4){
-        var y=H-(16+w*14)*Math.sin((x/W)*Math.PI*3+tick*0.55+w*1.3)
-               -(7+w*5)*Math.sin((x/W)*Math.PI*6-tick*0.85+w);
-        cx.lineTo(x,y);
-      }
-      cx.lineTo(W,H);cx.closePath();
-      var g=cx.createLinearGradient(0,H-80,0,H);
-      var wc=w===0?'#f4a7b9':w===1?'#e8758a':'#d4a843';
-      g.addColorStop(0,wc);g.addColorStop(1,'rgba(0,0,0,0)');
-      cx.fillStyle=g;cx.fill();cx.restore();
-    }
-  }
-
-  /* BOUCLE */
-  function loop(ts){
-    if(!alive)return;
-    requestAnimationFrame(loop);
-    tick+=0.016;
-    /* fond semi-transparent pour la traîne */
-    cx.fillStyle='rgba(26,8,18,0.20)';
-    cx.fillRect(0,0,cv.width,cv.height);
-    drawWaves();
-    if(ts>nxtR){rocks.push(new Rocket());nxtR=ts+420+Math.random()*530;}
-    if(ts>nxtF){floaters.push(new Floater());nxtF=ts+280+Math.random()*380;}
-    var i;
-    for(i=rocks.length-1;i>=0;i--){rocks[i].step();rocks[i].draw();if(rocks[i].done)rocks.splice(i,1);}
-    for(i=parts.length-1;i>=0;i--){parts[i].step();parts[i].draw();if(parts[i].dead())parts.splice(i,1);}
-    for(i=floaters.length-1;i>=0;i--){floaters[i].step();floaters[i].draw();if(floaters[i].dead())floaters.splice(i,1);}
-  }
+  function drawWaves(){var W=cv.width,H=cv.height;for(var w=0;w<3;w++){cx.save();cx.globalAlpha=0.08+w*0.05;cx.beginPath();cx.moveTo(0,H);for(var x=0;x<=W;x+=4){var y=H-(16+w*14)*Math.sin((x/W)*Math.PI*3+tick*0.55+w*1.3)-(7+w*5)*Math.sin((x/W)*Math.PI*6-tick*0.85+w);cx.lineTo(x,y);}cx.lineTo(W,H);cx.closePath();var g=cx.createLinearGradient(0,H-80,0,H);var wc=w===0?'#f4a7b9':w===1?'#e8758a':'#d4a843';g.addColorStop(0,wc);g.addColorStop(1,'rgba(0,0,0,0)');cx.fillStyle=g;cx.fill();cx.restore();}}
+  function loop(ts){if(!alive)return;requestAnimationFrame(loop);tick+=0.016;cx.fillStyle='rgba(26,8,18,0.20)';cx.fillRect(0,0,cv.width,cv.height);drawWaves();if(ts>nxtR){rocks.push(new Rocket());nxtR=ts+420+Math.random()*530;}if(ts>nxtF){floaters.push(new Floater());nxtF=ts+280+Math.random()*380;}var i;for(i=rocks.length-1;i>=0;i--){rocks[i].step();rocks[i].draw();if(rocks[i].done)rocks.splice(i,1);}for(i=parts.length-1;i>=0;i--){parts[i].step();parts[i].draw();if(parts[i].dead())parts.splice(i,1);}for(i=floaters.length-1;i>=0;i--){floaters[i].step();floaters[i].draw();if(floaters[i].dead())floaters.splice(i,1);}}
   requestAnimationFrame(loop);
 })();
 
-/* ═══════════════════════════
-   LOGIN
-═══════════════════════════ */
-var SECRET='270424';
-var SESSION_KEY='liv_auth';
-var codeEl=document.getElementById('codeInput');
-var hintEl=document.getElementById('loginHint');
-var loginBtn=document.getElementById('loginBtn');
-
+/* LOGIN */
+var SECRET='270424',SESSION_KEY='liv_auth';
+var codeEl=document.getElementById('codeInput'),hintEl=document.getElementById('loginHint'),loginBtn=document.getElementById('loginBtn');
 setTimeout(function(){codeEl.focus();},300);
-
-codeEl.addEventListener('input',function(){
-  codeEl.value=codeEl.value.replace(/\D/g,'').slice(0,6);
-});
-codeEl.addEventListener('keydown',function(e){
-  if(e.key==='Enter'){e.preventDefault();tryLogin();}
-});
+codeEl.addEventListener('input',function(){codeEl.value=codeEl.value.replace(/\D/g,'').slice(0,6);});
+codeEl.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();tryLogin();}});
 loginBtn.addEventListener('click',function(){tryLogin();});
+function tryLogin(){var code=codeEl.value.replace(/\D/g,'');if(code===SECRET){window._stopFw();sessionStorage.setItem(SESSION_KEY,'1');var ls=document.getElementById('loginScreen');ls.style.transition='opacity 0.4s';ls.style.opacity='0';setTimeout(function(){ls.style.display='none';loadApp();},400);}else{codeEl.classList.add('error');hintEl.textContent='Code incorrect, r\u00e9essaie \u2715';setTimeout(function(){codeEl.classList.remove('error');codeEl.value='';hintEl.textContent='';codeEl.focus();},1300);}}
+if(sessionStorage.getItem(SESSION_KEY)==='1'){window._stopFw();document.getElementById('loginScreen').style.display='none';loadApp();}
 
-function tryLogin(){
-  var code=codeEl.value.replace(/\D/g,'');
-  if(code===SECRET){
-    window._stopFw();
-    sessionStorage.setItem(SESSION_KEY,'1');
-    var ls=document.getElementById('loginScreen');
-    ls.style.transition='opacity 0.4s';
-    ls.style.opacity='0';
-    setTimeout(function(){ls.style.display='none';loadApp();},400);
-  } else {
-    codeEl.classList.add('error');
-    hintEl.textContent='Code incorrect, r\u00e9essaie \u2715';
-    setTimeout(function(){
-      codeEl.classList.remove('error');codeEl.value='';
-      hintEl.textContent='';codeEl.focus();
-    },1300);
-  }
-}
-
-if(sessionStorage.getItem(SESSION_KEY)==='1'){
-  window._stopFw();
-  document.getElementById('loginScreen').style.display='none';
-  loadApp();
-}
-
-/* ═══════════════════════════
-   APP + FIREBASE
-═══════════════════════════ */
+/* FIREBASE */
 function loadApp(){
   document.getElementById('app').style.display='block';
-
-  var s=document.createElement('script');
-  s.type='module';
+  var s=document.createElement('script');s.type='module';
   s.textContent=`
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import{getDatabase,ref,set,remove,onValue}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 const cfg={apiKey:"AIzaSyBbFd00z7R2wrgG94I0LHZd7bgNpIR6uzw",authDomain:"livraisons-73798.firebaseapp.com",databaseURL:"https://livraisons-73798-default-rtdb.europe-west1.firebasedatabase.app",projectId:"livraisons-73798",storageBucket:"livraisons-73798.firebasestorage.app",messagingSenderId:"631708987448",appId:"1:631708987448:web:ac4a859bd2728db50af6cd"};
 const db=getDatabase(initializeApp(cfg));
-const FR_DAYS=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
-const FR_S=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
-const FR_M=['Jan','F\u00e9v','Mar','Avr','Mai','Jun','Jul','Ao\u00fb','Sep','Oct','Nov','D\u00e9c'];
-const FR_MF=['Janvier','F\u00e9vrier','Mars','Avril','Mai','Juin','Juillet','Ao\u00fbt','Septembre','Octobre','Novembre','D\u00e9cembre'];
+const FD=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+const FS=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+const FM=['Jan','F\u00e9v','Mar','Avr','Mai','Jun','Jul','Ao\u00fb','Sep','Oct','Nov','D\u00e9c'];
+const FMF=['Janvier','F\u00e9vrier','Mars','Avril','Mai','Juin','Juillet','Ao\u00fbt','Septembre','Octobre','Novembre','D\u00e9cembre'];
 const today=new Date();today.setHours(0,0,0,0);
 let off=0,data={};
 const mon=d=>{const dt=new Date(d),day=dt.getDay();dt.setDate(dt.getDate()+(day===0?-6:1-day));dt.setHours(0,0,0,0);return dt;};
@@ -512,504 +348,427 @@ document.getElementById('btnPrev').addEventListener('click',()=>{off--;render();
 document.getElementById('btnNext').addEventListener('click',()=>{off++;render();window.scrollTo({top:0,behavior:'smooth'});});
 async function add(ds){const inp=document.getElementById('inp-'+ds);const t=inp.value.trim();if(!t){inp.focus();return;}sync('syncing','Enregistrement\u2026');const ex=data[sk(ds)]?.entries?{...data[sk(ds)].entries}:{};ex['e'+Date.now()]={text:t,time:nowT()};try{await set(ref(db,'livraisons/'+sk(ds)+'/entries'),ex);inp.value='';toast('\u2713 Not\u00e9 !');const c=document.querySelector('[data-ds="'+ds+'"]');if(c&&!c.classList.contains('open'))c.classList.add('open');setTimeout(()=>document.getElementById('inp-'+ds)?.focus(),60);}catch{sync('error','Erreur');toast('\u26a0\ufe0f Erreur');}}
 async function del(ds,id){sync('syncing','Suppression\u2026');try{await remove(ref(db,'livraisons/'+sk(ds)+'/entries/'+id));toast('\uD83D\uDDD1 Supprim\u00e9');}catch{sync('error','Erreur');}}
-function render(){
-  const base=mon(today);base.setDate(base.getDate()+off*7);
-  const sun=new Date(base);sun.setDate(sun.getDate()+6);
-  document.getElementById('weekRange').textContent=base.getMonth()===sun.getMonth()?base.getDate()+' \u2014 '+sun.getDate()+' '+FR_MF[sun.getMonth()]:base.getDate()+' '+FR_M[base.getMonth()]+' \u2014 '+sun.getDate()+' '+FR_M[sun.getMonth()];
-  document.getElementById('weekYear').textContent=sun.getFullYear();
-  const container=document.getElementById('daysContainer');
-  const od={};container.querySelectorAll('.day-card.open').forEach(c=>{od[c.dataset.ds]=true;});
-  container.innerHTML='';
-  for(let i=0;i<7;i++){
-    const day=new Date(base);day.setDate(day.getDate()+i);
-    const ds=iso(day),isT=ds===iso(today),isP=day<today;
-    const entries=data[sk(ds)]?.entries?Object.entries(data[sk(ds)].entries):[];
-    entries.sort((a,b)=>a[0].localeCompare(b[0]));
-    const n=entries.length;
-    const eHTML=n===0?'<div class="empty-msg">Rien encore\u2026 \u2728</div>':entries.map(([id,e])=>'<div class="entry"><span class="entry-dot">\u25c6</span><div class="entry-content"><div class="entry-text">'+esc(e.text)+'</div>'+(e.time?'<div class="entry-meta">\u23f1 '+e.time+'</div>':'')+'</div><button class="del-btn" data-ds="'+ds+'" data-id="'+id+'">\u2715</button></div>').join('');
-    const card=document.createElement('div');
-    card.className='day-card'+(isT?' today':'')+(isP?' past':'')+(isT||od[ds]?' open':'');
-    card.dataset.ds=ds;
-    const pill=isT?'<span class="today-pill">Aujourd&#39;hui</span>':'';
-    const countTxt=n===0?'Rien not\u00e9':n===1?'1 livraison':n+' livraisons';
-    card.innerHTML='<div class="day-head"><div class="day-num-wrap"><div class="day-abbr">'+FR_S[day.getDay()]+'</div><div class="day-num">'+day.getDate()+'</div></div><div class="day-info"><div class="day-fullname">'+FR_DAYS[day.getDay()]+'</div>'+pill+'<div class="entry-count'+(n?' has-entries':'')+'">'+countTxt+'</div></div><span class="chevron">&#8250;</span></div><div class="day-body"><div class="day-body-inner"><div class="entries">'+eHTML+'</div><div class="input-row"><input class="day-input" id="inp-'+ds+'" type="text" placeholder="Ex: Paris 11e, 14h30" maxlength="140" inputmode="text" autocomplete="off" autocorrect="off" spellcheck="false"><button class="add-btn" data-ds="'+ds+'">+</button></div></div></div>';
-    card.querySelector('.day-head').addEventListener('click',()=>card.classList.toggle('open'));
-    card.querySelector('.add-btn').addEventListener('click',()=>add(ds));
-    card.querySelector('.day-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();add(ds);}});
-    card.querySelectorAll('.del-btn').forEach(b=>b.addEventListener('click',()=>del(b.dataset.ds,b.dataset.id)));
-    container.appendChild(card);
-  }
-}
+function render(){const base=mon(today);base.setDate(base.getDate()+off*7);const sun=new Date(base);sun.setDate(sun.getDate()+6);document.getElementById('weekRange').textContent=base.getMonth()===sun.getMonth()?base.getDate()+' \u2014 '+sun.getDate()+' '+FMF[sun.getMonth()]:base.getDate()+' '+FM[base.getMonth()]+' \u2014 '+sun.getDate()+' '+FM[sun.getMonth()];document.getElementById('weekYear').textContent=sun.getFullYear();const container=document.getElementById('daysContainer');const od={};container.querySelectorAll('.day-card.open').forEach(c=>{od[c.dataset.ds]=true;});container.innerHTML='';for(let i=0;i<7;i++){const day=new Date(base);day.setDate(day.getDate()+i);const ds=iso(day),isT=ds===iso(today),isP=day<today;const entries=data[sk(ds)]?.entries?Object.entries(data[sk(ds)].entries):[];entries.sort((a,b)=>a[0].localeCompare(b[0]));const n=entries.length;const eHTML=n===0?'<div class="empty-msg">Rien encore\u2026 \u2728</div>':entries.map(([id,e])=>'<div class="entry"><span class="entry-dot">\u25c6</span><div class="entry-content"><div class="entry-text">'+esc(e.text)+'</div>'+(e.time?'<div class="entry-meta">\u23f1 '+e.time+'</div>':'')+'</div><button class="del-btn" data-ds="'+ds+'" data-id="'+id+'">\u2715</button></div>').join('');const card=document.createElement('div');card.className='day-card'+(isT?' today':'')+(isP?' past':'')+(isT||od[ds]?' open':'');card.dataset.ds=ds;const pill=isT?'<span class="today-pill">Aujourd&#39;hui</span>':'';const cnt=n===0?'Rien not\u00e9':n===1?'1 livraison':n+' livraisons';card.innerHTML='<div class="day-head"><div class="day-num-wrap"><div class="day-abbr">'+FS[day.getDay()]+'</div><div class="day-num">'+day.getDate()+'</div></div><div class="day-info"><div class="day-fullname">'+FD[day.getDay()]+'</div>'+pill+'<div class="entry-count'+(n?' has-entries':'')+'">'+cnt+'</div></div><span class="chevron">&#8250;</span></div><div class="day-body"><div class="day-body-inner"><div class="entries">'+eHTML+'</div><div class="input-row"><input class="day-input" id="inp-'+ds+'" type="text" placeholder="Ex: Paris 11e, 14h30" maxlength="140" inputmode="text" autocomplete="off" autocorrect="off" spellcheck="false"><button class="add-btn" data-ds="'+ds+'">+</button></div></div></div>';card.querySelector('.day-head').addEventListener('click',()=>card.classList.toggle('open'));card.querySelector('.add-btn').addEventListener('click',()=>add(ds));card.querySelector('.day-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();add(ds);}});card.querySelectorAll('.del-btn').forEach(b=>b.addEventListener('click',()=>del(b.dataset.ds,b.dataset.id)));container.appendChild(card);}}
 let tt;function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2200);}
-
-/* REDBULL CARNET — sync Firebase */
+/* RB FIREBASE */
 const rbRef=ref(db,'redbull_carnet');
-onValue(rbRef,snap=>{
-  const val=snap.val()||'';
-  const ta=document.getElementById('rbTextarea');
-  if(ta&&document.activeElement!==ta) ta.value=val;
-});
-window._rbSaveToFb=async function(txt){
-  try{ await set(rbRef,txt); } catch(e){ console.warn('rb save err',e); }
-};
-
+onValue(rbRef,snap=>{const val=snap.val()||'';const ta=document.getElementById('rbTextarea');if(ta&&document.activeElement!==ta)ta.value=val;});
+window._rbSaveToFb=async function(txt){try{await set(rbRef,txt);}catch(e){}};
+/* PHOTOS FIREBASE */
+window._fbPhotoSave=async function(dk,who,url,cb){try{await set(ref(db,'photos/'+dk.replace(/-/g,'_')+'/'+who),url);if(cb)cb();}catch(e){}};
+window._fbPhotoLoad=function(dk,cb){onValue(ref(db,'photos/'+dk.replace(/-/g,'_')),function(s){cb(s.val());},{onlyOnce:true});};
+window._fbPhotoList=function(cb){onValue(ref(db,'photos'),function(s){var raw=s.val()||{},res={};Object.keys(raw).forEach(function(k){res[k.replace(/_/g,'-')]=raw[k];});cb(res);},{onlyOnce:true});};
 `;
   document.head.appendChild(s);
 }
 
 /* MESSAGES DU JOUR */
-var MESSAGES = [
-  {e:"🌹", t:"Tu es la plus belle chose qui me soit arrivée. Je t'aime."},
-  {e:"💖", t:"Chaque matin je me lève en pensant à toi. Tu es mon soleil."},
-  {e:"🌸", t:"Peu importe où je livre aujourd'hui, mon cœur est toujours avec toi."},
-  {e:"✨", t:"Tu es ma personne préférée dans tout l'univers."},
-  {e:"🦋", t:"J'ai hâte de rentrer ce soir et de te retrouver."},
-  {e:"💫", t:"Tu rends chaque journée plus belle juste en existant."},
-  {e:"🌺", t:"Je suis le plus chanceux du monde de t'avoir à mes côtés."},
-  {e:"💝", t:"Merci d'être exactement qui tu es. Je t'aime infiniment."},
-  {e:"🎀", t:"Tu es ma maison, peu importe où je suis dans la journée."},
-  {e:"🌙", t:"Le soir venu, c'est ton sourire que je veux voir en premier."},
-  {e:"💌", t:"Tu m'inspires chaque jour à être meilleur. Merci mon amour."},
-  {e:"🌷", t:"Rien ne me rend plus heureux que d'entendre ta voix."},
-  {e:"⭐", t:"Tu es ma douceur, mon calme, mon tout."},
-  {e:"🍀", t:"Avoir de la chance c'est t'avoir dans ma vie."},
-  {e:"☀️", t:"Ton sourire illumine mes journées les plus difficiles."},
-  {e:"🥰", t:"Je pourrais te regarder pendant des heures sans me lasser."},
-  {e:"💞", t:"Mon endroit préféré au monde, c'est près de toi."},
-  {e:"🌻", t:"Tu apportes de la lumière partout où tu passes."},
-  {e:"💗", t:"Je tombe amoureux de toi un peu plus chaque jour."},
-  {e:"🌈", t:"Avec toi, même les jours gris deviennent magnifiques."},
-  {e:"💓", t:"Ton bonheur compte plus que tout pour moi."},
-  {e:"🫶", t:"Merci d'aimer mes défauts autant que mes qualités."},
-  {e:"🔥", t:"Ton regard me fait toujours le même effet."},
-  {e:"🍓", t:"Tu rends ma vie plus douce que n'importe quel rêve."},
-  {e:"🎶", t:"Ta voix est ma musique préférée."},
-  {e:"🌼", t:"Je pense à toi même quand je devrais penser à autre chose."},
-  {e:"🧡", t:"Tu es mon plus beau hasard."},
-  {e:"🌊", t:"Mon amour pour toi est immense et sans fin."},
-  {e:"🎈", t:"Tu rends mon cœur léger et heureux."},
-  {e:"💎", t:"Tu es précieuse à mes yeux."},
-  {e:"🍯", t:"Tes câlins sont mon refuge préféré."},
-  {e:"🌞", t:"Même fatigué, penser à toi me redonne le sourire."},
-  {e:"💋", t:"J'aimerais t'embrasser à chaque seconde."},
-  {e:"🌹", t:"Tu es la définition parfaite du mot amour."},
-  {e:"💫", t:"Je suis fier de partager ma vie avec toi."},
-  {e:"🕊️", t:"Avec toi, je me sens en paix."},
-  {e:"🌍", t:"Tu es mon monde entier."},
-  {e:"🎁", t:"Chaque jour avec toi est un cadeau."},
-  {e:"💜", t:"Ton amour me donne de la force."},
-  {e:"🌺", t:"Tu es encore plus belle que dans mes rêves."},
-  {e:"🥹", t:"Parfois je te regarde et je réalise à quel point j'ai de la chance."},
-  {e:"🩷", t:"Ton rire est mon son préféré."},
-  {e:"🍀", t:"Je remercie la vie de t'avoir mise sur mon chemin."},
-  {e:"🌠", t:"Tu es mon plus beau souhait devenu réalité."},
-  {e:"💖", t:"Je t'aime plus fort chaque jour."},
-  {e:"✨", t:"Tu es mon bonheur quotidien."},
-  {e:"🌸", t:"Mon cœur choisira toujours le tien."},
-  {e:"🌹", t:"Tu es ma plus belle pensée."},
-  {e:"☀️", t:"Je souris rien qu'en pensant à toi."},
-  {e:"🦋", t:"Tu rends ma vie incroyable."},
-  {e:"💝", t:"Je suis fou amoureux de toi."},
-  {e:"🌷", t:"Ton amour est mon trésor."},
-  {e:"🌙", t:"Je veux vivre mille vies avec toi."},
-  {e:"💌", t:"Tu es mon rêve préféré."},
-  {e:"🌺", t:"Avec toi tout paraît plus simple."},
-  {e:"💫", t:"Je t'aimerai encore demain et tous les jours après."},
-  {e:"⭐", t:"Tu es la meilleure partie de ma journée."},
-  {e:"🥰", t:"Ton sourire me fait craquer."},
-  {e:"💞", t:"J'adore partager ma vie avec toi."},
-  {e:"🌈", t:"Tu es mon évidence."},
-  {e:"💓", t:"Tu illumines tout autour de toi sans même t'en rendre compte."},
-  {e:"🫶", t:"Je suis heureux chaque fois que je pense à nous."},
-  {e:"🍓", t:"Tu es unique et irremplaçable."},
-  {e:"🎶", t:"Chaque moment avec toi est précieux."},
-  {e:"🌼", t:"Tu es la raison de mes plus beaux sourires."},
-  {e:"🧡", t:"Mon amour pour toi grandit sans cesse."},
-  {e:"🌊", t:"Tu mérites tout le bonheur du monde."},
-  {e:"🎈", t:"Rien que ton prénom me fait sourire."},
-  {e:"💎", t:"Tu es exceptionnelle à tous points de vue."},
-  {e:"🍯", t:"Je veux être là pour toi chaque jour."},
-  {e:"🌞", t:"Tu es ma motivation de chaque matin."},
-  {e:"💋", t:"Tes lèvres sont mon endroit préféré."},
-  {e:"🕊️", t:"Je me sens complet quand je suis avec toi."},
-  {e:"🌍", t:"Tu donnes du sens à tout ce que je fais."},
-  {e:"🎁", t:"T'avoir dans ma vie est le plus beau des cadeaux."},
-  {e:"💜", t:"Je t'aime de tout mon être."},
-  {e:"🥹", t:"Tu fais battre mon cœur d'une façon unique."},
-  {e:"🩷", t:"Je veux te rendre aussi heureuse que tu me rends heureux."},
-  {e:"🌠", t:"Tu es la femme de ma vie."},
-  {e:"🌹", t:"Je serais perdu sans toi."},
-  {e:"💖", t:"Tu es ma force quand je suis faible."},
-  {e:"🌸", t:"Ton amour est le plus beau que j'aie jamais connu."},
-  {e:"✨", t:"Tu es parfaite à mes yeux."},
-  {e:"🦋", t:"Chaque jour avec toi est une nouvelle aventure."},
-  {e:"💫", t:"Je t'appartiens entièrement."},
-  {e:"🌺", t:"Tu es ma raison de sourire."},
-  {e:"💝", t:"Quand tu ris, le monde devient plus beau."},
-  {e:"🎀", t:"Tu es celle qui me comprend mieux que personne."},
-  {e:"🌙", t:"Même la nuit, tu es dans mes pensées."},
-  {e:"💌", t:"Je suis meilleur grâce à toi."},
-  {e:"🌷", t:"Tu es ma priorité absolue."},
-  {e:"⭐", t:"Je ne te remercierai jamais assez d'être là."},
-  {e:"☀️", t:"Tu es mon petit coin de paradis."},
-  {e:"🥰", t:"Je t'aime comme au premier jour, en plus fort."},
-  {e:"💞", t:"Avec toi, j'ai trouvé ma place."},
-  {e:"🌻", t:"Tu fais partie de mes plus beaux souvenirs."},
-  {e:"💗", t:"Tu es la personne que j'ai choisie et que je choisis chaque jour."},
-  {e:"🌈", t:"Tes yeux valent tous les couchers de soleil."},
-  {e:"💓", t:"Tu es mon ancre et mes ailes à la fois."},
-  {e:"🫶", t:"Je suis accro à ta présence."},
-  {e:"🔥", t:"Tu allumes quelque chose en moi que personne d'autre ne peut."},
-  {e:"🍓", t:"Ta douceur me touche profondément."},
-  {e:"🎶", t:"Je veux composer chaque journée avec toi."},
-  {e:"🌼", t:"Tu es l'amour le plus sincère que j'aie vécu."},
-  {e:"🧡", t:"Je t'aime dans le silence et dans l'éclat."},
-  {e:"🌊", t:"Mon amour pour toi est plus profond que l'océan."},
-  {e:"🎈", t:"Tu es la fête de ma vie."},
-  {e:"💎", t:"Rare, précieuse, unique — c'est toi."},
-  {e:"🍯", t:"Ta tendresse est ma douceur quotidienne."},
-  {e:"🌞", t:"Tu es le soleil de mes hivers."},
-  {e:"💋", t:"Je pense à toi à chaque pause."},
-  {e:"🕊️", t:"Tu es ma paix intérieure."},
-  {e:"🌍", t:"Le monde est plus beau depuis que tu es dans ma vie."},
-  {e:"🎁", t:"Je veux te gâter chaque jour."},
-  {e:"💜", t:"Mon amour pour toi est inconditionnel."},
-  {e:"🌺", t:"Tu es la fleur de ma vie."},
-  {e:"🥹", t:"Je réalise chaque jour la chance que j'ai."},
-  {e:"🩷", t:"Tu es tout ce que j'ai toujours cherché."},
-  {e:"🌠", t:"Je te souhaite le meilleur parce que tu le mérites."},
-  {e:"💖", t:"Chaque seconde avec toi est un trésor."},
-  {e:"✨", t:"Ta beauté intérieure me fascine."},
-  {e:"🌸", t:"Tu es la douceur dans ma vie de livreur."},
-  {e:"🌹", t:"Je rentrerai toujours vers toi."},
-  {e:"🦋", t:"Tu me fais voir la vie différemment."},
-  {e:"💫", t:"Mon bonheur c'est toi."},
-  {e:"💝", t:"Je t'aime bien plus que les mots ne peuvent le dire."},
-  {e:"🎀", t:"Tu es mon chez-moi."},
-  {e:"🌙", t:"Les étoiles brillent pour moi parce que tu es là."},
-  {e:"💌", t:"Je pense à toi entre chaque livraison."},
-  {e:"🌷", t:"Ta présence guérit tout."},
-  {e:"⭐", t:"Tu es l'étoile de ma vie."},
-  {e:"☀️", t:"Tu es mon rayon de soleil permanent."},
-  {e:"🥰", t:"Je suis addicted à ton amour."},
-  {e:"💞", t:"Nous deux, c'est pour toujours."},
-  {e:"🌻", t:"Tu rayonnes même les jours sans lumière."},
-  {e:"💗", t:"Tu mérites d'être aimée infiniment."},
-  {e:"🌈", t:"Même la pluie me rappelle ta beauté."},
-  {e:"💓", t:"Ton amour me transforme en meilleure version de moi-même."},
-  {e:"🫶", t:"Je suis là pour toi comme tu es là pour moi."},
-  {e:"🍓", t:"Tu es la saveur de ma vie."},
-  {e:"🎶", t:"Je voudrais te chanter mon amour tous les jours."},
-  {e:"🌼", t:"Tu es ma fleur préférée."},
-  {e:"🧡", t:"Mon amour pour toi brûle comme une flamme éternelle."},
-  {e:"🌊", t:"Tu es mon calme dans la tempête."},
-  {e:"🎈", t:"Avec toi, chaque jour est une célébration."},
-  {e:"💎", t:"Tu as plus de valeur que tous les diamants."},
-  {e:"🍯", t:"Tu sucres ma vie naturellement."},
-  {e:"🌞", t:"Tu es mon éveil chaque matin."},
-  {e:"💋", t:"Je t'embrasse dans mes pensées."},
-  {e:"🕊️", t:"Tu es ma sérénité."},
-  {e:"🌍", t:"Tu es tout mon univers."},
-  {e:"🎁", t:"Je veux t'offrir mes meilleurs moments."},
-  {e:"💜", t:"Tu es dans mon cœur à chaque instant."},
-  {e:"🌺", t:"Tu fleuris dans mon cœur chaque jour."},
-  {e:"🥹", t:"Tu me combles sans même le savoir."},
-  {e:"🩷", t:"Je suis éperdument amoureux de toi."},
-  {e:"🌠", t:"Tu es ma plus belle étoile filante devenue permanente."},
-  {e:"🌹", t:"Tu es celle que j'ai choisie pour toujours."},
-  {e:"💖", t:"Ton amour est ma plus grande richesse."},
-  {e:"🌸", t:"Tu es douce comme le printemps."},
-  {e:"✨", t:"Avec toi, la vie scintille."},
-  {e:"🦋", t:"Tu transformes mes jours ordinaires en jours extraordinaires."},
-  {e:"💫", t:"Je t'aime à l'infini et au-delà."},
-  {e:"🌺", t:"Tu es la perfection à mes yeux."},
-  {e:"💝", t:"Merci d'être ma compagne de vie."},
-  {e:"🎀", t:"Tu es le joli nœud de ma vie."},
-  {e:"🌙", t:"Sous les étoiles, je ne pense qu'à toi."},
-  {e:"💌", t:"Tu es la lettre d'amour que j'écris chaque jour."},
-  {e:"🌷", t:"Tu es délicate et forte à la fois."},
-  {e:"⭐", t:"Tu brilles plus que toutes les étoiles."},
-  {e:"☀️", t:"Tu es mon énergie quotidienne."},
-  {e:"🥰", t:"Je suis amoureux de ton âme."},
-  {e:"💞", t:"Nos cœurs battent à l'unisson."},
-  {e:"🌻", t:"Tu tournes vers moi comme le soleil."},
-  {e:"💗", t:"Je t'aime follement, profondément."},
-  {e:"🌈", t:"Tu es toutes les couleurs de ma vie."},
-  {e:"💓", t:"Mon cœur n'appartient qu'à toi."},
-  {e:"🫶", t:"Je veux prendre soin de toi chaque jour."},
-  {e:"🔥", t:"L'amour que j'ai pour toi ne s'éteindra jamais."},
-  {e:"🍓", t:"Ta présence est la plus belle des saveurs."},
-  {e:"🎶", t:"Tu es la mélodie de mon âme."},
-  {e:"🌼", t:"Tu épanouis tout ce qui t'entoure."},
-  {e:"🧡", t:"Mon amour pour toi est orange soleil."},
-  {e:"🌊", t:"Je me noie dans tes yeux et c'est magnifique."},
-  {e:"🎈", t:"Tu fais s'envoler mon cœur."},
-  {e:"💎", t:"Tu es un joyau irremplaçable."},
-  {e:"🍯", t:"Tes mots doux me réchauffent toujours."},
-  {e:"🌞", t:"Tu es mon meilleur réveil."},
-  {e:"💋", t:"Je t'embrasse de loin mais de tout mon cœur."},
-  {e:"🕊️", t:"Tu es mon havre de paix."},
-  {e:"🌍", t:"Sans toi, le monde serait fade."},
-  {e:"🎁", t:"Tu es le plus beau cadeau du hasard."},
-  {e:"💜", t:"Je t'aime maintenant et pour toujours."},
-  {e:"🌺", t:"Tu es ma fleur la plus précieuse."},
-  {e:"🥹", t:"Tu me rends meilleur juste en m'aimant."},
-  {e:"🩷", t:"Ton amour est la chose la plus précieuse que je possède."},
-  {e:"🌠", t:"Tu es mon étoile guide."},
-  {e:"💖", t:"Je t'aime chaque jour davantage."},
-  {e:"✨", t:"Tu es lumineuse et magnifique."},
-  {e:"🌸", t:"Avec toi, tout est plus léger."},
-  {e:"🌹", t:"Tu es la beauté de ma vie."},
-  {e:"🦋", t:"Tu fais battre mon cœur comme au premier jour."},
-  {e:"💫", t:"Je suis fier de toi chaque jour."},
-  {e:"💝", t:"Tu es mon inspiration."},
-  {e:"🎀", t:"Tu es le beau de ma vie."},
-  {e:"🌙", t:"Tu es mon dernier sourire avant de dormir."},
-  {e:"💌", t:"Tu es ma plus belle déclaration."},
-  {e:"🌷", t:"Tu es ma fleur de chaque saison."},
-  {e:"⭐", t:"Tu es mon repère dans l'obscurité."},
-  {e:"☀️", t:"Tu es ma chaleur hivernale."},
-  {e:"🥰", t:"Je t'adore au-delà de tout."},
-  {e:"💞", t:"Avec toi, je veux tout partager."},
-  {e:"🌻", t:"Ta joie de vivre me contamine."},
-  {e:"💗", t:"Tu es mon amour absolu."},
-  {e:"🌈", t:"Tu colores ma vie de mille teintes."},
-  {e:"💓", t:"Tu es mon cœur qui bat en dehors de moi."},
-  {e:"🫶", t:"Je veux juste te voir heureuse."},
-  {e:"🍓", t:"Tu es la douceur que je n'espérais plus."},
-  {e:"🎶", t:"Ta présence est ma symphonie."},
-  {e:"🌼", t:"Tu fleuris là où tu poses tes pieds."},
-  {e:"🧡", t:"Je brûle d'amour pour toi."},
-  {e:"🌊", t:"Ton amour m'emporte et c'est bon."},
-  {e:"🎈", t:"Tu allèges chaque fardeau."},
-  {e:"💎", t:"Tu vaux infiniment plus que tu ne le crois."},
-  {e:"🍯", t:"Tu es la douceur au bout d'une longue journée."},
-  {e:"🌞", t:"Tu es mon premier et dernier soleil."},
-  {e:"💋", t:"Je compte les heures avant de te retrouver."},
-  {e:"🕊️", t:"Tu es ma lumière dans les moments sombres."},
-  {e:"🌍", t:"Je voudrais explorer le monde entier avec toi."},
-  {e:"🎁", t:"Tu m'offres ton amour et c'est tout ce dont j'ai besoin."},
-  {e:"💜", t:"Tu es la couleur de mon bonheur."},
-  {e:"🌺", t:"Tu es plus belle à chaque regard."},
-  {e:"🥹", t:"Je suis touché par qui tu es."},
-  {e:"🩷", t:"Ton amour me porte chaque jour."},
-  {e:"🌠", t:"Tu es mon vœu le plus précieux exaucé."},
-  {e:"🌹", t:"Je n'imagine pas ma vie sans toi."},
-  {e:"💖", t:"Chaque battement de mon cœur est pour toi."},
-  {e:"🌸", t:"Tu es ma sérénité rose."},
-  {e:"✨", t:"Tu fais briller tout ce qui t'entoure."},
-  {e:"🦋", t:"Tu m'as appris à aimer autrement."},
-  {e:"💫", t:"Je veux vieillir en souriant à tes côtés."},
-  {e:"💝", t:"Tu es mon amour de toujours."},
-  {e:"🎀", t:"Tu es le nœud parfait de ma vie."},
-  {e:"🌙", t:"La nuit est douce quand je pense à toi."},
-  {e:"💌", t:"Mon amour pour toi est ma plus belle lettre."},
-  {e:"🌷", t:"Tu es ma rose sans épines."},
-  {e:"⭐", t:"Tu mérites toutes les étoiles du ciel."},
-  {e:"☀️", t:"Tu es le soleil que je n'ai jamais perdu."},
-  {e:"🥰", t:"Tes yeux me parlent sans mots."},
-  {e:"💞", t:"Nos deux cœurs ne font qu'un."},
-  {e:"🌻", t:"Tu es mon tournesol."},
-  {e:"💗", t:"Je suis épris de toi pour l'éternité."},
-  {e:"🌈", t:"Tu es l'arc-en-ciel après chaque pluie."},
-  {e:"💓", t:"Mon amour pour toi est vivant et fort."},
-  {e:"🫶", t:"Je veux te chérir chaque jour davantage."},
-  {e:"🔥", t:"Rien ni personne ne pourra éteindre ce que je ressens pour toi."},
-  {e:"🍓", t:"Tu es la fraîcheur de ma vie."},
-  {e:"🎶", t:"Je veux danser toute la vie avec toi."},
-  {e:"🌼", t:"Tu es mon jardin secret."},
-  {e:"🧡", t:"Je t'aime avec tout ce que j'ai."},
-  {e:"🌊", t:"Je me laisse porter par l'amour que j'ai pour toi."},
-  {e:"🎈", t:"Tu remplis ma vie de joie et de légèreté."},
-  {e:"💎", t:"Tu es la gemme de mon existence."},
-  {e:"🍯", t:"Ton amour est sucré comme le miel."},
-  {e:"🌞", t:"Je me réveille heureux parce que tu existes."},
-  {e:"💋", t:"Mes pensées te rejoignent toujours."},
-  {e:"🕊️", t:"Tu es mon repos après les longues journées."},
-  {e:"🌍", t:"Je veux construire un monde avec toi."},
-  {e:"🎁", t:"Ton amour est le seul cadeau dont j'ai besoin."},
-  {e:"💜", t:"Je t'appartiens corps et âme."},
-  {e:"🌺", t:"Tu embellies tout ce que tu touches."},
-  {e:"🥹", t:"Tu m'émeus profondément."},
-  {e:"🩷", t:"Ton amour est ma plus grande victoire."},
-  {e:"🌠", t:"Tu es ma constellation favorite."},
-  {e:"💖", t:"L'amour que j'ai pour toi est infini."},
-  {e:"✨", t:"Tu es mon miracle quotidien."},
-  {e:"🌸", t:"Tu es douce, forte et magnifique."},
-  {e:"🌹", t:"Tu es l'amour de ma vie, sans hésitation."},
-  {e:"🦋", t:"Tu as changé ma vie pour le mieux."},
-  {e:"💫", t:"Mon plus grand rêve est de te rendre heureuse."},
-  {e:"💝", t:"Chaque seconde à tes côtés est une bénédiction."},
-  {e:"🎀", t:"Tu es mon cadeau de tous les jours."},
-  {e:"🌙", t:"Je t'aime sous toutes les lunes."},
-  {e:"💌", t:"Tu es ma pensée la plus douce."},
-  {e:"🌷", t:"Tu es la tendresse incarnée."},
-  {e:"⭐", t:"Tu es mon étoile polaire."},
-  {e:"☀️", t:"Avec toi le soleil brille même sous la pluie."},
-  {e:"🥰", t:"Je t'aime plus que tu ne l'imagines."},
-  {e:"💞", t:"Nos vies entrelacées sont ma plus belle histoire."},
-  {e:"🌻", t:"Tu es ma lumière dorée."},
-  {e:"💗", t:"Tu es l'amour que je n'attendais plus."},
-  {e:"🌈", t:"Tu es ma palette de bonheur."},
-  {e:"💓", t:"Je t'aime comme la mer aime ses rivages."},
-  {e:"🫶", t:"Tu es ma raison d'avancer."},
-  {e:"🍓", t:"Ton amour est la plus belle des saveurs."},
-  {e:"🎶", t:"Avec toi, chaque jour est une chanson."},
-  {e:"🌼", t:"Tu es ma fleur éternelle."},
-  {e:"🧡", t:"Mon amour pour toi est vaste et sincère."},
-  {e:"🌊", t:"Tu es mon grand amour."},
-  {e:"🎈", t:"Tu allumes des étoiles dans mes yeux."},
-  {e:"💎", t:"Tu es inestimable."},
-  {e:"🍯", t:"Ton amour nourrit mon âme."},
-  {e:"🌞", t:"Tu es ma constante lumineuse."},
-  {e:"💋", t:"Je pense à toi et mon cœur accélère."},
-  {e:"🕊️", t:"Tu es mon équilibre."},
-  {e:"🌍", t:"Tu es tout ce que j'aime dans ce monde."},
-  {e:"🎁", t:"Chaque matin est un cadeau parce que tu es là."},
-  {e:"💜", t:"Je t'aime profondément et sincèrement."},
-  {e:"🌺", t:"Tu es la beauté que je contemple chaque jour."},
-  {e:"🥹", t:"Tu me touches comme personne d'autre."},
-  {e:"🩷", t:"Tu es ma plus belle chance."},
-  {e:"🌠", t:"Tu es mon étoile la plus lumineuse."},
-  {e:"🌹", t:"Je t'aimerai toute ma vie."},
-  {e:"💖", t:"Tu es le battement de mon cœur."},
-  {e:"🌸", t:"Tu es la douceur de mes journées."},
-  {e:"✨", t:"Tu fais briller ma vie."},
-  {e:"🦋", t:"Tu es ma transformation en bonheur."},
-  {e:"💫", t:"Je veux tout partager avec toi."},
-  {e:"💝", t:"Tu es mon amour véritable."},
-  {e:"🎀", t:"Tu es mon nœud de vie parfait."},
-  {e:"🌙", t:"Je t'aime sous chaque étoile."},
-  {e:"💌", t:"Tu es mes plus beaux mots."},
-  {e:"🌷", t:"Tu es ma fleur de chaque instant."},
-  {e:"⭐", t:"Tu mérites tout le meilleur."},
-  {e:"☀️", t:"Tu es mon soleil intérieur."},
-  {e:"🥰", t:"Je t'aime plus chaque jour."},
-  {e:"💞", t:"Tu es mon amour et mon amie."},
-  {e:"🌻", t:"Tu es ma lumière qui guide."},
-  {e:"💗", t:"Tu es mon amour de cœur."},
-  {e:"🌈", t:"Tu es toutes mes couleurs préférées."},
-  {e:"💓", t:"Mon cœur est plein de toi."},
-  {e:"🫶", t:"Je t'aime de tout mon cœur et de toute mon âme."},
-  {e:"🌹", t:"Tu es irremplaçable dans ma vie."},
-  {e:"💖", t:"Mon amour pour toi est éternel."},
-  {e:"🌸", t:"Tu es ma plus belle destination."},
-  {e:"✨", t:"Je t'aime au-delà des mots."},
-  {e:"🦋", t:"Tu es ma lumière dans chaque ombre."},
-  {e:"💫", t:"Avec toi, je suis chez moi partout."},
-  {e:"🌺", t:"Tu es mon sourire du matin."},
-  {e:"💝", t:"Je suis à toi entièrement."},
-  {e:"🎀", t:"Tu es l'amour que je méritais."},
-  {e:"🌙", t:"Ton amour est ma plus grande fierté."},
-  {e:"💌", t:"Tu es ma douceur et ma force."},
-  {e:"🌷", t:"Je t'aime dans chaque langue du monde."},
-  {e:"⭐", t:"Tu es ma chose préférée."},
-  {e:"☀️", t:"Je suis heureux de t'avoir choisie."},
-  {e:"🥰", t:"Tu es mon beau côté de la vie."},
-  {e:"💞", t:"Ton amour est mon énergie."},
-  {e:"🌻", t:"Tu es le meilleur de ma vie."},
-  {e:"💗", t:"Je veux toujours te voir sourire."},
-  {e:"🌈", t:"Tu es mon plus beau projet de vie."},
-  {e:"💓", t:"Je t'aime sans condition."},
-  {e:"🫶", t:"Tu es le sens de ma vie."},
-  {e:"🔥", t:"Tu es mon feu sacré."},
-  {e:"🍓", t:"Tu es ma douceur sucrée."},
-  {e:"🎶", t:"Tu es ma note parfaite."},
-  {e:"🌼", t:"Tu es mon jardin en fleurs."},
-  {e:"🧡", t:"Je brûle pour toi d'un feu doux."},
-  {e:"🌊", t:"Tu es mon horizon."},
-  {e:"🎈", t:"Tu es ma légèreté."},
-  {e:"💎", t:"Tu es mon diamant brut."},
-  {e:"🍯", t:"Tu es mon sucre d'amour."},
-  {e:"🌞", t:"Tu es mon aurore."},
-  {e:"💋", t:"Je t'embrasse de loin, de près, partout."},
-  {e:"🕊️", t:"Tu es ma colombe."},
-  {e:"🌍", t:"Tu es ma terre promise."},
-  {e:"🎁", t:"Tu es le plus beau présent de ma vie."},
-  {e:"💜", t:"Tu es ma violette préférée."},
-  {e:"🥹", t:"Tu me touches dans les profondeurs."},
-  {e:"🩷", t:"Tu es ma joie rose."},
-  {e:"🌠", t:"Tu es mon étoile de chaque nuit."},
+var MESSAGES=[
+{e:"🌹",t:"Tu es la plus belle chose qui me soit arrivée. Je t'aime."},
+{e:"💖",t:"Chaque matin je me lève en pensant à toi. Tu es mon soleil."},
+{e:"🌸",t:"Peu importe où je livre aujourd'hui, mon coeur est toujours avec toi."},
+{e:"✨",t:"Tu es ma personne préférée dans tout l'univers."},
+{e:"🦋",t:"J'ai hâte de rentrer ce soir et de te retrouver."},
+{e:"💫",t:"Tu rends chaque journée plus belle juste en existant."},
+{e:"🌺",t:"Je suis le plus chanceux du monde de t'avoir à mes côtés."},
+{e:"💝",t:"Merci d'être exactement qui tu es. Je t'aime infiniment."},
+{e:"🎀",t:"Tu es ma maison, peu importe où je suis dans la journée."},
+{e:"🌙",t:"Le soir venu, c'est ton sourire que je veux voir en premier."},
+{e:"💌",t:"Tu m'inspires chaque jour à être meilleur. Merci mon amour."},
+{e:"🌷",t:"Rien ne me rend plus heureux que d'entendre ta voix."},
+{e:"⭐",t:"Tu es ma douceur, mon calme, mon tout."},
+{e:"🍀",t:"Avoir de la chance c'est t'avoir dans ma vie."},
+{e:"☀️",t:"Ton sourire illumine mes journées les plus difficiles."},
+{e:"🥰",t:"Je pourrais te regarder pendant des heures sans me lasser."},
+{e:"💞",t:"Mon endroit préféré au monde, c'est près de toi."},
+{e:"🌻",t:"Tu apportes de la lumière partout où tu passes."},
+{e:"💗",t:"Je tombe amoureux de toi un peu plus chaque jour."},
+{e:"🌈",t:"Avec toi, même les jours gris deviennent magnifiques."},
+{e:"💓",t:"Ton bonheur compte plus que tout pour moi."},
+{e:"🫶",t:"Merci d'aimer mes défauts autant que mes qualités."},
+{e:"🔥",t:"Ton regard me fait toujours le même effet."},
+{e:"🍓",t:"Tu rends ma vie plus douce que n'importe quel rêve."},
+{e:"🎶",t:"Ta voix est ma musique préférée."},
+{e:"🌼",t:"Je pense à toi même quand je devrais penser à autre chose."},
+{e:"🧡",t:"Tu es mon plus beau hasard."},
+{e:"🌊",t:"Mon amour pour toi est immense et sans fin."},
+{e:"🎈",t:"Tu rends mon coeur léger et heureux."},
+{e:"💎",t:"Tu es précieuse à mes yeux."},
+{e:"🍯",t:"Tes câlins sont mon refuge préféré."},
+{e:"🌞",t:"Même fatigué, penser à toi me redonne le sourire."},
+{e:"💋",t:"J'aimerais t'embrasser à chaque seconde."},
+{e:"🌹",t:"Tu es la définition parfaite du mot amour."},
+{e:"💫",t:"Je suis fier de partager ma vie avec toi."},
+{e:"🕊️",t:"Avec toi, je me sens en paix."},
+{e:"🌍",t:"Tu es mon monde entier."},
+{e:"🎁",t:"Chaque jour avec toi est un cadeau."},
+{e:"💜",t:"Ton amour me donne de la force."},
+{e:"🌺",t:"Tu es encore plus belle que dans mes rêves."},
+{e:"🥹",t:"Parfois je te regarde et je réalise à quel point j'ai de la chance."},
+{e:"🩷",t:"Ton rire est mon son préféré."},
+{e:"🍀",t:"Je remercie la vie de t'avoir mise sur mon chemin."},
+{e:"🌠",t:"Tu es mon plus beau souhait devenu réalité."},
+{e:"💖",t:"Je t'aime plus fort chaque jour."},
+{e:"✨",t:"Tu es mon bonheur quotidien."},
+{e:"🌸",t:"Mon coeur choisira toujours le tien."},
+{e:"🌹",t:"Tu es ma plus belle pensée."},
+{e:"☀️",t:"Je souris rien qu'en pensant à toi."},
+{e:"🦋",t:"Tu rends ma vie incroyable."},
+{e:"💝",t:"Je suis fou amoureux de toi."},
+{e:"🌷",t:"Ton amour est mon trésor."},
+{e:"🌙",t:"Je veux vivre mille vies avec toi."},
+{e:"💌",t:"Tu es mon rêve préféré."},
+{e:"🌺",t:"Avec toi tout paraît plus simple."},
+{e:"💫",t:"Je t'aimerai encore demain et tous les jours après."},
+{e:"⭐",t:"Tu es la meilleure partie de ma journée."},
+{e:"🥰",t:"Ton sourire me fait craquer."},
+{e:"💞",t:"J'adore partager ma vie avec toi."},
+{e:"🌈",t:"Tu es mon évidence."},
+{e:"💓",t:"Tu illumines tout autour de toi sans même t'en rendre compte."},
+{e:"🫶",t:"Je suis heureux chaque fois que je pense à nous."},
+{e:"🍓",t:"Tu es unique et irremplaçable."},
+{e:"🎶",t:"Chaque moment avec toi est précieux."},
+{e:"🌼",t:"Tu es la raison de mes plus beaux sourires."},
+{e:"🧡",t:"Mon amour pour toi grandit sans cesse."},
+{e:"🌊",t:"Tu mérites tout le bonheur du monde."},
+{e:"🎈",t:"Rien que ton prénom me fait sourire."},
+{e:"💎",t:"Tu es exceptionnelle à tous points de vue."},
+{e:"🍯",t:"Je veux être là pour toi chaque jour."},
+{e:"🌞",t:"Tu es ma motivation de chaque matin."},
+{e:"💋",t:"Tes lèvres sont mon endroit préféré."},
+{e:"🕊️",t:"Je me sens complet quand je suis avec toi."},
+{e:"🌍",t:"Tu donnes du sens à tout ce que je fais."},
+{e:"🎁",t:"T'avoir dans ma vie est le plus beau des cadeaux."},
+{e:"💜",t:"Je t'aime de tout mon être."},
+{e:"🥹",t:"Tu fais battre mon coeur d'une façon unique."},
+{e:"🩷",t:"Je veux te rendre aussi heureuse que tu me rends heureux."},
+{e:"🌠",t:"Tu es la femme de ma vie."},
+{e:"🌹",t:"Je serais perdu sans toi."},
+{e:"💖",t:"Tu es ma force quand je suis faible."},
+{e:"🌸",t:"Ton amour est le plus beau que j'aie jamais connu."},
+{e:"✨",t:"Tu es parfaite à mes yeux."},
+{e:"🦋",t:"Chaque jour avec toi est une nouvelle aventure."},
+{e:"💫",t:"Je t'appartiens entièrement."},
+{e:"🌺",t:"Tu es ma raison de sourire."},
+{e:"💝",t:"Quand tu ris, le monde devient plus beau."},
+{e:"🎀",t:"Tu es celle qui me comprend mieux que personne."},
+{e:"🌙",t:"Même la nuit, tu es dans mes pensées."},
+{e:"💌",t:"Je suis meilleur grâce à toi."},
+{e:"🌷",t:"Tu es ma priorité absolue."},
+{e:"⭐",t:"Je ne te remercierai jamais assez d'être là."},
+{e:"☀️",t:"Tu es mon petit coin de paradis."},
+{e:"🥰",t:"Je t'aime comme au premier jour, en plus fort."},
+{e:"💞",t:"Avec toi, j'ai trouvé ma place."},
+{e:"🌻",t:"Tu fais partie de mes plus beaux souvenirs."},
+{e:"💗",t:"Tu es la personne que j'ai choisie et que je choisis chaque jour."},
+{e:"🌈",t:"Tes yeux valent tous les couchers de soleil."},
+{e:"💓",t:"Tu es mon ancre et mes ailes à la fois."},
+{e:"🫶",t:"Je suis accro à ta présence."},
+{e:"🔥",t:"Tu allumes quelque chose en moi que personne d'autre ne peut."},
+{e:"🍓",t:"Ta douceur me touche profondément."},
+{e:"🎶",t:"Je veux composer chaque journée avec toi."},
+{e:"🌼",t:"Tu es l'amour le plus sincère que j'aie vécu."},
+{e:"🧡",t:"Je t'aime dans le silence et dans l'éclat."},
+{e:"🌊",t:"Mon amour pour toi est plus profond que l'océan."},
+{e:"🎈",t:"Tu es la fête de ma vie."},
+{e:"💎",t:"Rare, précieuse, unique — c'est toi."},
+{e:"🍯",t:"Ta tendresse est ma douceur quotidienne."},
+{e:"🌞",t:"Tu es le soleil de mes hivers."},
+{e:"💋",t:"Je pense à toi à chaque pause."},
+{e:"🕊️",t:"Tu es ma paix intérieure."},
+{e:"🌍",t:"Le monde est plus beau depuis que tu es dans ma vie."},
+{e:"🎁",t:"Je veux te gâter chaque jour."},
+{e:"💜",t:"Mon amour pour toi est inconditionnel."},
+{e:"🌺",t:"Tu es la fleur de ma vie."},
+{e:"🥹",t:"Je réalise chaque jour la chance que j'ai."},
+{e:"🩷",t:"Tu es tout ce que j'ai toujours cherché."},
+{e:"🌠",t:"Je te souhaite le meilleur parce que tu le mérites."},
+{e:"💖",t:"Chaque seconde avec toi est un trésor."},
+{e:"✨",t:"Ta beauté intérieure me fascine."},
+{e:"🌸",t:"Tu es la douceur dans ma vie de livreur."},
+{e:"🌹",t:"Je rentrerai toujours vers toi."},
+{e:"🦋",t:"Tu me fais voir la vie différemment."},
+{e:"💫",t:"Mon bonheur c'est toi."},
+{e:"💝",t:"Je t'aime bien plus que les mots ne peuvent le dire."},
+{e:"🎀",t:"Tu es mon chez-moi."},
+{e:"🌙",t:"Les étoiles brillent pour moi parce que tu es là."},
+{e:"💌",t:"Je pense à toi entre chaque livraison."},
+{e:"🌷",t:"Ta présence guérit tout."},
+{e:"⭐",t:"Tu es l'étoile de ma vie."},
+{e:"☀️",t:"Tu es mon rayon de soleil permanent."},
+{e:"🥰",t:"Je suis addicted à ton amour."},
+{e:"💞",t:"Nous deux, c'est pour toujours."},
+{e:"🌻",t:"Tu rayonnes même les jours sans lumière."},
+{e:"💗",t:"Tu mérites d'être aimée infiniment."},
+{e:"🌈",t:"Même la pluie me rappelle ta beauté."},
+{e:"💓",t:"Ton amour me transforme en meilleure version de moi-même."},
+{e:"🫶",t:"Je suis là pour toi comme tu es là pour moi."},
+{e:"🍓",t:"Tu es la saveur de ma vie."},
+{e:"🎶",t:"Je voudrais te chanter mon amour tous les jours."},
+{e:"🌼",t:"Tu es ma fleur préférée."},
+{e:"🧡",t:"Mon amour pour toi brûle comme une flamme éternelle."},
+{e:"🌊",t:"Tu es mon calme dans la tempête."},
+{e:"🎈",t:"Avec toi, chaque jour est une célébration."},
+{e:"💎",t:"Tu as plus de valeur que tous les diamants."},
+{e:"🍯",t:"Tu sucres ma vie naturellement."},
+{e:"🌞",t:"Tu es mon éveil chaque matin."},
+{e:"💋",t:"Je t'embrasse dans mes pensées."},
+{e:"🕊️",t:"Tu es ma sérénité."},
+{e:"🌍",t:"Tu es tout mon univers."},
+{e:"🎁",t:"Je veux t'offrir mes meilleurs moments."},
+{e:"💜",t:"Tu es dans mon coeur à chaque instant."},
+{e:"🌺",t:"Tu fleuris dans mon coeur chaque jour."},
+{e:"🥹",t:"Tu me combles sans même le savoir."},
+{e:"🩷",t:"Je suis éperdument amoureux de toi."},
+{e:"🌠",t:"Tu es ma plus belle étoile filante devenue permanente."},
+{e:"🌹",t:"Tu es celle que j'ai choisie pour toujours."},
+{e:"💖",t:"Ton amour est ma plus grande richesse."},
+{e:"🌸",t:"Tu es douce comme le printemps."},
+{e:"✨",t:"Avec toi, la vie scintille."},
+{e:"🦋",t:"Tu transformes mes jours ordinaires en jours extraordinaires."},
+{e:"💫",t:"Je t'aime à l'infini et au-delà."},
+{e:"🌺",t:"Tu es la perfection à mes yeux."},
+{e:"💝",t:"Merci d'être ma compagne de vie."},
+{e:"🎀",t:"Tu es le joli noeud de ma vie."},
+{e:"🌙",t:"Sous les étoiles, je ne pense qu'à toi."},
+{e:"💌",t:"Tu es la lettre d'amour que j'écris chaque jour."},
+{e:"🌷",t:"Tu es délicate et forte à la fois."},
+{e:"⭐",t:"Tu brilles plus que toutes les étoiles."},
+{e:"☀️",t:"Tu es mon énergie quotidienne."},
+{e:"🥰",t:"Je suis amoureux de ton âme."},
+{e:"💞",t:"Nos coeurs battent à l'unisson."},
+{e:"🌻",t:"Tu tournes vers moi comme le soleil."},
+{e:"💗",t:"Je t'aime follement, profondément."},
+{e:"🌈",t:"Tu es toutes les couleurs de ma vie."},
+{e:"💓",t:"Mon coeur n'appartient qu'à toi."},
+{e:"🫶",t:"Je veux prendre soin de toi chaque jour."},
+{e:"🔥",t:"L'amour que j'ai pour toi ne s'éteindra jamais."},
+{e:"🍓",t:"Ta présence est la plus belle des saveurs."},
+{e:"🎶",t:"Tu es la mélodie de mon âme."},
+{e:"🌼",t:"Tu épanouis tout ce qui t'entoure."},
+{e:"🧡",t:"Mon amour pour toi est orange soleil."},
+{e:"🌊",t:"Je me noie dans tes yeux et c'est magnifique."},
+{e:"🎈",t:"Tu fais s'envoler mon coeur."},
+{e:"💎",t:"Tu es un joyau irremplaçable."},
+{e:"🍯",t:"Tes mots doux me réchauffent toujours."},
+{e:"🌞",t:"Tu es mon meilleur réveil."},
+{e:"💋",t:"Je t'embrasse de loin mais de tout mon coeur."},
+{e:"🕊️",t:"Tu es mon havre de paix."},
+{e:"🌍",t:"Sans toi, le monde serait fade."},
+{e:"🎁",t:"Tu es le plus beau cadeau du hasard."},
+{e:"💜",t:"Je t'aime maintenant et pour toujours."},
+{e:"🌺",t:"Tu es ma fleur la plus précieuse."},
+{e:"🥹",t:"Tu me rends meilleur juste en m'aimant."},
+{e:"🩷",t:"Ton amour est la chose la plus précieuse que je possède."},
+{e:"🌠",t:"Tu es mon étoile guide."},
+{e:"💖",t:"Je t'aime chaque jour davantage."},
+{e:"✨",t:"Tu es lumineuse et magnifique."},
+{e:"🌸",t:"Avec toi, tout est plus léger."},
+{e:"🌹",t:"Tu es la beauté de ma vie."},
+{e:"🦋",t:"Tu fais battre mon coeur comme au premier jour."},
+{e:"💫",t:"Je suis fier de toi chaque jour."},
+{e:"💝",t:"Tu es mon inspiration."},
+{e:"🎀",t:"Tu es le beau de ma vie."},
+{e:"🌙",t:"Tu es mon dernier sourire avant de dormir."},
+{e:"💌",t:"Tu es ma plus belle déclaration."},
+{e:"🌷",t:"Tu es ma fleur de chaque saison."},
+{e:"⭐",t:"Tu es mon repère dans l'obscurité."},
+{e:"☀️",t:"Tu es ma chaleur hivernale."},
+{e:"🥰",t:"Je t'adore au-delà de tout."},
+{e:"💞",t:"Avec toi, je veux tout partager."},
+{e:"🌻",t:"Ta joie de vivre me contamine."},
+{e:"💗",t:"Tu es mon amour absolu."},
+{e:"🌈",t:"Tu colores ma vie de mille teintes."},
+{e:"💓",t:"Tu es mon coeur qui bat en dehors de moi."},
+{e:"🫶",t:"Je veux juste te voir heureuse."},
+{e:"🍓",t:"Tu es la douceur que je n'espérais plus."},
+{e:"🎶",t:"Ta présence est ma symphonie."},
+{e:"🌼",t:"Tu fleuris là où tu poses tes pieds."},
+{e:"🧡",t:"Je brûle d'amour pour toi."},
+{e:"🌊",t:"Ton amour m'emporte et c'est bon."},
+{e:"🎈",t:"Tu allèges chaque fardeau."},
+{e:"💎",t:"Tu vaux infiniment plus que tu ne le crois."},
+{e:"🍯",t:"Tu es la douceur au bout d'une longue journée."},
+{e:"🌞",t:"Tu es mon premier et dernier soleil."},
+{e:"💋",t:"Je compte les heures avant de te retrouver."},
+{e:"🕊️",t:"Tu es ma lumière dans les moments sombres."},
+{e:"🌍",t:"Je voudrais explorer le monde entier avec toi."},
+{e:"🎁",t:"Tu m'offres ton amour et c'est tout ce dont j'ai besoin."},
+{e:"💜",t:"Tu es la couleur de mon bonheur."},
+{e:"🌺",t:"Tu es plus belle à chaque regard."},
+{e:"🥹",t:"Je suis touché par qui tu es."},
+{e:"🩷",t:"Ton amour me porte chaque jour."},
+{e:"🌠",t:"Tu es mon voeu le plus précieux exaucé."},
+{e:"🌹",t:"Je n'imagine pas ma vie sans toi."},
+{e:"💖",t:"Chaque battement de mon coeur est pour toi."},
+{e:"🌸",t:"Tu es ma sérénité rose."},
+{e:"✨",t:"Tu fais briller tout ce qui t'entoure."},
+{e:"🦋",t:"Tu m'as appris à aimer autrement."},
+{e:"💫",t:"Je veux vieillir en souriant à tes côtés."},
+{e:"💝",t:"Tu es mon amour de toujours."},
+{e:"🌙",t:"La nuit est douce quand je pense à toi."},
+{e:"💌",t:"Mon amour pour toi est ma plus belle lettre."},
+{e:"🌷",t:"Tu es ma rose sans épines."},
+{e:"⭐",t:"Tu mérites toutes les étoiles du ciel."},
+{e:"☀️",t:"Tu es le soleil que je n'ai jamais perdu."},
+{e:"🥰",t:"Tes yeux me parlent sans mots."},
+{e:"💞",t:"Nos deux coeurs ne font qu'un."},
+{e:"🌻",t:"Tu es mon tournesol."},
+{e:"💗",t:"Je suis épris de toi pour l'éternité."},
+{e:"🌈",t:"Tu es l'arc-en-ciel après chaque pluie."},
+{e:"💓",t:"Mon amour pour toi est vivant et fort."},
+{e:"🫶",t:"Je veux te chérir chaque jour davantage."},
+{e:"🔥",t:"Rien ni personne ne pourra éteindre ce que je ressens pour toi."},
+{e:"🍓",t:"Tu es la fraîcheur de ma vie."},
+{e:"🎶",t:"Je veux danser toute la vie avec toi."},
+{e:"🌼",t:"Tu es mon jardin secret."},
+{e:"🧡",t:"Je t'aime avec tout ce que j'ai."},
+{e:"🌊",t:"Je me laisse porter par l'amour que j'ai pour toi."},
+{e:"🎈",t:"Tu remplis ma vie de joie et de légèreté."},
+{e:"💎",t:"Tu es la gemme de mon existence."},
+{e:"🍯",t:"Ton amour est sucré comme le miel."},
+{e:"🌞",t:"Je me réveille heureux parce que tu existes."},
+{e:"💋",t:"Mes pensées te rejoignent toujours."},
+{e:"🕊️",t:"Tu es mon repos après les longues journées."},
+{e:"🌍",t:"Je veux construire un monde avec toi."},
+{e:"🎁",t:"Ton amour est le seul cadeau dont j'ai besoin."},
+{e:"💜",t:"Je t'appartiens corps et âme."},
+{e:"🌺",t:"Tu embellies tout ce que tu touches."},
+{e:"🥹",t:"Tu m'émeus profondément."},
+{e:"🩷",t:"Ton amour est ma plus grande victoire."},
+{e:"🌠",t:"Tu es ma constellation favorite."},
+{e:"💖",t:"L'amour que j'ai pour toi est infini."},
+{e:"✨",t:"Tu es mon miracle quotidien."},
+{e:"🌸",t:"Tu es douce, forte et magnifique."},
+{e:"🌹",t:"Tu es l'amour de ma vie, sans hésitation."},
+{e:"🦋",t:"Tu as changé ma vie pour le mieux."},
+{e:"💫",t:"Mon plus grand rêve est de te rendre heureuse."},
+{e:"💝",t:"Chaque seconde à tes côtés est une bénédiction."},
+{e:"🎀",t:"Tu es mon cadeau de tous les jours."},
+{e:"🌙",t:"Je t'aime sous toutes les lunes."},
+{e:"💌",t:"Tu es ma pensée la plus douce."},
+{e:"🌷",t:"Tu es la tendresse incarnée."},
+{e:"⭐",t:"Tu es mon étoile polaire."},
+{e:"☀️",t:"Avec toi le soleil brille même sous la pluie."},
+{e:"🥰",t:"Je t'aime plus que tu ne l'imagines."},
+{e:"💞",t:"Nos vies entrelacées sont ma plus belle histoire."},
+{e:"🌻",t:"Tu es ma lumière dorée."},
+{e:"💗",t:"Tu es l'amour que je n'attendais plus."},
+{e:"🌈",t:"Tu es ma palette de bonheur."},
+{e:"💓",t:"Je t'aime comme la mer aime ses rivages."},
+{e:"🫶",t:"Tu es ma raison d'avancer."},
+{e:"🍓",t:"Ton amour est la plus belle des saveurs."},
+{e:"🎶",t:"Avec toi, chaque jour est une chanson."},
+{e:"🌼",t:"Tu es ma fleur éternelle."},
+{e:"🧡",t:"Mon amour pour toi est vaste et sincère."},
+{e:"🌊",t:"Tu es mon grand amour."},
+{e:"🎈",t:"Tu allumes des étoiles dans mes yeux."},
+{e:"💎",t:"Tu es inestimable."},
+{e:"🍯",t:"Ton amour nourrit mon âme."},
+{e:"🌞",t:"Tu es ma constante lumineuse."},
+{e:"💋",t:"Je pense à toi et mon coeur accélère."},
+{e:"🕊️",t:"Tu es mon équilibre."},
+{e:"🌍",t:"Tu es tout ce que j'aime dans ce monde."},
+{e:"🎁",t:"Chaque matin est un cadeau parce que tu es là."},
+{e:"💜",t:"Je t'aime profondément et sincèrement."},
+{e:"🌺",t:"Tu es la beauté que je contemple chaque jour."},
+{e:"🥹",t:"Tu me touches comme personne d'autre."},
+{e:"🩷",t:"Tu es ma plus belle chance."},
+{e:"🌠",t:"Tu es mon étoile la plus lumineuse."},
+{e:"🌹",t:"Je t'aimerai toute ma vie."},
+{e:"💖",t:"Tu es le battement de mon coeur."},
+{e:"🌸",t:"Tu es la douceur de mes journées."},
+{e:"✨",t:"Tu fais briller ma vie."},
+{e:"🦋",t:"Tu es ma transformation en bonheur."},
+{e:"💫",t:"Je veux tout partager avec toi."},
+{e:"💝",t:"Tu es mon amour véritable."},
+{e:"🌙",t:"Je t'aime sous chaque étoile."},
+{e:"💌",t:"Tu es mes plus beaux mots."},
+{e:"🌷",t:"Tu es ma fleur de chaque instant."},
+{e:"⭐",t:"Tu mérites tout le meilleur."},
+{e:"☀️",t:"Tu es mon soleil intérieur."},
+{e:"🥰",t:"Je t'aime plus chaque jour."},
+{e:"💞",t:"Tu es mon amour et mon amie."},
+{e:"🌻",t:"Tu es ma lumière qui guide."},
+{e:"💗",t:"Tu es mon amour de coeur."},
+{e:"🌈",t:"Tu es toutes mes couleurs préférées."},
+{e:"💓",t:"Mon coeur est plein de toi."},
+{e:"🫶",t:"Je t'aime de tout mon coeur et de toute mon âme."},
 ];
+
 var FR_DAYS_LONG=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
 var FR_MONTHS_LONG=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 
-document.getElementById('giftBtn').addEventListener('click', function(){
-  var now = new Date();
-  var start=new Date(now.getFullYear(),0,0);var diff=now-start;var oneDay=1000*60*60*24;var dayOfYear=Math.floor(diff/oneDay);var idx=(dayOfYear-1)%MESSAGES.length;
-  var msg = MESSAGES[idx];
-  document.getElementById('msgEmoji').textContent = msg.e;
-  document.getElementById('msgText').textContent = msg.t;
-  document.getElementById('msgDate').textContent = FR_DAYS_LONG[now.getDay()]+' '+now.getDate()+' '+FR_MONTHS_LONG[now.getMonth()];
-  /* Reset envelope state */
-  var env=document.getElementById('envelope');
-  var content=document.getElementById('msgContent');
-  var hint=document.getElementById('envHint');
-  env.classList.remove('open');
-  content.classList.remove('revealed');
-  hint.style.display='block';
+document.getElementById('giftBtn').addEventListener('click',function(){
+  var now=new Date();
+  var start=new Date(now.getFullYear(),0,0);var diff=now-start;var dayOfYear=Math.floor(diff/(1000*60*60*24));var idx=(dayOfYear-1)%MESSAGES.length;
+  var msg=MESSAGES[idx];
+  document.getElementById('msgEmoji').textContent=msg.e;
+  document.getElementById('msgText').textContent=msg.t;
+  document.getElementById('msgDate').textContent=FR_DAYS_LONG[now.getDay()]+' '+now.getDate()+' '+FR_MONTHS_LONG[now.getMonth()];
+  document.getElementById('envelope').classList.remove('open');
+  document.getElementById('msgContent').classList.remove('revealed');
+  document.getElementById('envHint').style.display='block';
   document.getElementById('msgOverlay').classList.add('open');
 });
-
-/* Clic sur enveloppe → s'ouvre + révèle le message */
-document.getElementById('envelopeWrap').addEventListener('click', function(){
+document.getElementById('envelopeWrap').addEventListener('click',function(){
   var env=document.getElementById('envelope');
-  var msgContent=document.getElementById('msgContent');
-  var hint=document.getElementById('envHint');
   if(!env.classList.contains('open')){
     env.classList.add('open');
-    hint.style.display='none';
-    setTimeout(function(){ msgContent.classList.add('revealed'); }, 500);
+    document.getElementById('envHint').style.display='none';
+    setTimeout(function(){document.getElementById('msgContent').classList.add('revealed');},500);
   }
 });
+document.getElementById('msgClose').addEventListener('click',function(){document.getElementById('msgOverlay').classList.remove('open');});
+document.getElementById('msgOverlay').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 
-document.getElementById('msgClose').addEventListener('click', function(){
-  document.getElementById('msgOverlay').classList.remove('open');
-});
-document.getElementById('msgOverlay').addEventListener('click', function(e){
-  if(e.target===this) this.classList.remove('open');
-});
-
-/* CARNET REDBULL */
+/* RB */
 function initRbCarnet(){
-  var rbBtn=document.getElementById('rbBtn');
-  var rbOverlay=document.getElementById('rbOverlay');
-  var rbClose=document.getElementById('rbClose');
-  var rbSave=document.getElementById('rbSave');
-  var rbTextarea=document.getElementById('rbTextarea');
-  var rbSavedMsg=document.getElementById('rbSavedMsg');
-  if(!rbBtn||!rbOverlay) return;
-
-  rbBtn.addEventListener('click', function(){
-    rbOverlay.classList.add('open');
-    setTimeout(function(){ rbTextarea.focus(); }, 200);
-  });
-  rbClose.addEventListener('click', function(){
-    rbOverlay.classList.remove('open');
-  });
-  rbOverlay.addEventListener('click', function(e){
-    if(e.target===this) this.classList.remove('open');
-  });
-
-  function doSave(){
-    var txt=rbTextarea.value;
-    if(window._rbSaveToFb) window._rbSaveToFb(txt);
-    rbSavedMsg.classList.add('show');
-    setTimeout(function(){ rbSavedMsg.classList.remove('show'); }, 2000);
-  }
-
-  rbSave.addEventListener('click', doSave);
-
-  /* Sauvegarde auto toutes les 5s si ouvert */
-  setInterval(function(){
-    if(rbOverlay.classList.contains('open') && window._rbSaveToFb){
-      window._rbSaveToFb(rbTextarea.value);
-    }
-  }, 5000);
+  var rbBtn=document.getElementById('rbBtn'),rbOverlay=document.getElementById('rbOverlay'),rbClose=document.getElementById('rbClose'),rbSave=document.getElementById('rbSave'),rbTextarea=document.getElementById('rbTextarea'),rbSavedMsg=document.getElementById('rbSavedMsg');
+  if(!rbBtn)return;
+  rbBtn.addEventListener('click',function(){rbOverlay.classList.add('open');setTimeout(function(){rbTextarea.focus();},200);});
+  rbClose.addEventListener('click',function(){rbOverlay.classList.remove('open');});
+  rbOverlay.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
+  rbSave.addEventListener('click',function(){if(window._rbSaveToFb)window._rbSaveToFb(rbTextarea.value);rbSavedMsg.classList.add('show');setTimeout(function(){rbSavedMsg.classList.remove('show');},2000);});
+  setInterval(function(){if(rbOverlay.classList.contains('open')&&window._rbSaveToFb)window._rbSaveToFb(rbTextarea.value);},5000);
 }
 
-window.addEventListener('DOMContentLoaded', function(){ initRbCarnet(); });
+/* PHOTOS */
+var CLOUD='dogit74w1',PRESET='ml_default';
+function todayKey(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1).toString().padStart(2,'0')+'-'+d.getDate().toString().padStart(2,'0');}
+function uploadCloud(file,cb){var fd=new FormData();fd.append('file',file);fd.append('upload_preset',PRESET);var x=new XMLHttpRequest();x.open('POST','https://api.cloudinary.com/v1_1/'+CLOUD+'/image/upload');x.onload=function(){try{cb(null,JSON.parse(x.responseText).secure_url);}catch(e){cb('err');}};x.onerror=function(){cb('err');};x.send(fd);}
 
+function initPhotoSection(){
+  var photoBtn=document.getElementById('photoBtn'),photoOverlay=document.getElementById('photoOverlay'),photoClose=document.getElementById('photoClose');
+  var slotMoi=document.getElementById('slotMoi'),slotElle=document.getElementById('slotElle');
+  var uploadMoi=document.getElementById('uploadMoi'),uploadElle=document.getElementById('uploadElle');
+  if(!photoBtn)return;
+  function loading(slot,on){var el=slot.querySelector('.photo-uploading');if(on&&!el){var d=document.createElement('div');d.className='photo-uploading';d.textContent='Envoi...';slot.appendChild(d);}if(!on&&el)el.remove();}
+  function renderSlot(slot,url,lbl){slot.innerHTML='';slot.classList.add('has-photo');var img=document.createElement('img');img.src=url;slot.appendChild(img);var l=document.createElement('div');l.className='photo-slot-label';l.textContent=lbl;slot.appendChild(l);}
+  function resetSlot(slot,icon,txt){slot.innerHTML='<div class="photo-slot-icon">'+icon+'</div><div class="photo-slot-text">'+txt+'</div>';slot.classList.remove('has-photo');}
+  function loadToday(){
+    var now=new Date();
+    var days=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+    var months=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+    document.getElementById('photoDateLabel').textContent=days[now.getDay()]+' '+now.getDate()+' '+months[now.getMonth()];
+    if(window._fbPhotoLoad){window._fbPhotoLoad(todayKey(),function(data){
+      if(data&&data.moi)renderSlot(slotMoi,data.moi,'Moi');else resetSlot(slotMoi,'🚗','Ma photo du jour');
+      if(data&&data.elle)renderSlot(slotElle,data.elle,'Elle');else resetSlot(slotElle,'💌','Sa photo du jour');
+    });}
+    loadHistory();
+  }
+  function doUpload(file,who,slot){loading(slot,true);uploadCloud(file,function(err,url){loading(slot,false);if(err){alert('Erreur envoi');return;}if(window._fbPhotoSave){window._fbPhotoSave(todayKey(),who,url,function(){renderSlot(slot,url,who==='moi'?'Moi':'Elle');loadHistory();});}});}
+  slotMoi.addEventListener('click',function(){if(!slotMoi.classList.contains('has-photo'))uploadMoi.click();});
+  slotElle.addEventListener('click',function(){if(!slotElle.classList.contains('has-photo'))uploadElle.click();});
+  uploadMoi.addEventListener('change',function(){if(this.files[0])doUpload(this.files[0],'moi',slotMoi);});
+  uploadElle.addEventListener('change',function(){if(this.files[0])doUpload(this.files[0],'elle',slotElle);});
+  function loadHistory(){if(!window._fbPhotoList)return;window._fbPhotoList(function(all){var hist=document.getElementById('photoHistory');var today=todayKey();var past=Object.keys(all).filter(function(d){return d!==today;}).sort().reverse().slice(0,9);if(!past.length){hist.innerHTML='';return;}var h='<div class="photo-history-title">Nos souvenirs</div><div class="photo-history-grid">';past.forEach(function(d){var e=all[d];var url=e.moi||e.elle||'';if(!url)return;var p=d.split('-');h+='<div class="photo-history-item"><img src="'+url+'" loading="lazy"><div class="photo-history-date">'+p[2]+'/'+p[1]+'</div></div>';});h+='</div>';hist.innerHTML=h;});}
+  photoBtn.addEventListener('click',function(){photoOverlay.classList.add('open');loadToday();});
+  photoClose.addEventListener('click',function(){photoOverlay.classList.remove('open');});
+  photoOverlay.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
+}
+
+window.addEventListener('DOMContentLoaded',function(){initRbCarnet();initPhotoSection();});
 </script>
 </body>
 </html>
