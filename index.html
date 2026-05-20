@@ -52,28 +52,41 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
 @keyframes giftpulse{0%,100%{transform:scale(1);box-shadow:0 2px 10px rgba(212,168,67,0.4)}50%{transform:scale(1.12);box-shadow:0 4px 18px rgba(212,168,67,0.7)}}
 .msg-overlay{position:fixed;inset:0;z-index:9000;background:rgba(45,26,34,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity 0.3s;}
 .msg-overlay.open{opacity:1;pointer-events:all;}
-.msg-card{background:white;border-radius:28px;padding:36px 28px;max-width:320px;width:100%;text-align:center;box-shadow:0 16px 60px rgba(232,117,138,0.25);border:1px solid var(--border);transform:scale(0.9);transition:transform 0.3s;position:relative;}
+
+/* Enveloppe */
+.envelope-wrap{perspective:600px;margin-bottom:20px;cursor:pointer;user-select:none;}
+.envelope{width:120px;height:85px;margin:0 auto;position:relative;transform-style:preserve-3d;}
+/* Corps */
+.env-body{position:absolute;inset:0;background:linear-gradient(135deg,#fce8ef,#fdf3e0);border-radius:4px 4px 8px 8px;border:1.5px solid rgba(232,117,138,0.35);box-shadow:0 4px 20px rgba(232,117,138,0.2);}
+/* Flap fermé */
+.env-flap{position:absolute;top:0;left:0;right:0;height:52px;background:linear-gradient(160deg,#f9dde6,#fce8ef);border-radius:4px 4px 0 0;transform-origin:top center;clip-path:polygon(0 0,100% 0,50% 100%);border:1.5px solid rgba(232,117,138,0.3);transition:transform 0.6s cubic-bezier(.4,0,.2,1);z-index:3;}
+.envelope.open .env-flap{transform:rotateX(-180deg);}
+/* Triangle bas */
+.env-bottom{position:absolute;bottom:0;left:0;right:0;height:52px;background:linear-gradient(to top,#fce8ef,#fdf6ee);clip-path:polygon(0 100%,100% 100%,50% 0);border-radius:0 0 8px 8px;z-index:1;}
+/* Triangles côtés */
+.env-left{position:absolute;top:0;bottom:0;left:0;width:60px;background:linear-gradient(to right,#fceef4,#fce8ef);clip-path:polygon(0 0,0 100%,100% 50%);z-index:2;}
+.env-right{position:absolute;top:0;bottom:0;right:0;width:60px;background:linear-gradient(to left,#fceef4,#fce8ef);clip-path:polygon(100% 0,100% 100%,0 50%);z-index:2;}
+/* Lettre qui sort */
+.env-letter{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);width:88px;background:white;border-radius:4px;padding:6px 8px;font-family:'Playfair Display',serif;font-size:0.5rem;color:var(--rose);text-align:center;line-height:1.4;border:1px solid rgba(232,117,138,0.2);box-shadow:0 2px 8px rgba(232,117,138,0.15);transition:transform 0.6s 0.2s cubic-bezier(.4,0,.2,1);z-index:0;transform:translateX(-50%) translateY(0);}
+.envelope.open .env-letter{transform:translateX(-50%) translateY(-40px);}
+/* Sceau coeur */
+.env-seal{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:18px;z-index:4;transition:opacity 0.3s;}
+.envelope.open .env-seal{opacity:0;}
+
+/* Carte message (cachée au début) */
+.msg-card{background:white;border-radius:28px;padding:28px 28px 28px;max-width:320px;width:100%;text-align:center;box-shadow:0 16px 60px rgba(232,117,138,0.25);border:1px solid var(--border);transform:scale(0.9);transition:transform 0.3s;position:relative;display:flex;flex-direction:column;align-items:center;}
 .msg-overlay.open .msg-card{transform:scale(1);}
+.msg-card-content{opacity:0;transform:translateY(10px);transition:opacity 0.5s 0.5s, transform 0.5s 0.5s;pointer-events:none;}
+.msg-card-content.revealed{opacity:1;transform:translateY(0);pointer-events:all;}
 .msg-card-emoji{font-size:44px;display:block;margin-bottom:12px;animation:float 3s ease-in-out infinite;}
 .msg-card-date{font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--mauve);margin-bottom:14px;}
 .msg-card-text{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--dark);line-height:1.6;font-style:italic;margin-bottom:20px;}
 .msg-card-close{background:linear-gradient(135deg,var(--rose),var(--mauve));border:none;border-radius:30px;color:white;padding:10px 28px;font-family:'Playfair Display',serif;font-size:0.9rem;cursor:pointer;-webkit-appearance:none;}
+.env-hint{font-size:0.72rem;color:var(--mauve);font-style:italic;margin-top:8px;animation:pulse-hint 2s infinite;}
+@keyframes pulse-hint{0%,100%{opacity:0.6}50%{opacity:1}}
 .rb-btn{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #4fc3f7;border-radius:20px;padding:6px 12px;font-size:0.72rem;color:#4fc3f7;cursor:pointer;font-weight:700;letter-spacing:0.5px;-webkit-appearance:none;white-space:nowrap;box-shadow:0 2px 10px rgba(79,195,247,0.3);}
 .rb-btn:active{opacity:0.8;}
-.map-btn{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#1e88e5,#1565c0);border:none;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 10px rgba(30,136,229,0.4);-webkit-appearance:none;position:relative;}
-.map-btn:active{opacity:0.8;}
-.map-dot{position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:#4caf50;border:1.5px solid white;display:none;animation:mapdot 1.5s infinite;}
-.map-dot.active{display:block;}
-@keyframes mapdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
-/* MAP OVERLAY */
-.map-overlay{position:fixed;inset:0;z-index:9002;background:rgba(0,0,0,0.92);display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.3s;}
-.map-overlay.open{opacity:1;pointer-events:all;}
-.map-header{background:#1565c0;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.map-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:white;display:flex;align-items:center;gap:8px;}
-.map-status{font-size:0.7rem;color:rgba(255,255,255,0.7);font-style:italic;margin-top:2px;}
-.map-close{background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);border-radius:20px;color:white;padding:6px 16px;font-size:0.8rem;cursor:pointer;-webkit-appearance:none;}
-#gmap{flex:1;width:100%;}
-.map-info{background:#1565c0;padding:10px 20px;font-size:0.75rem;color:rgba(255,255,255,0.8);text-align:center;font-style:italic;flex-shrink:0;}
+
 /* CARNET REDBULL */
 .rb-overlay{position:fixed;inset:0;z-index:9001;background:rgba(10,5,20,0.92);backdrop-filter:blur(6px);display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.3s;}
 .rb-overlay.open{opacity:1;pointer-events:all;}
@@ -170,7 +183,6 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
   </div>
   <div class="header">
     <div class="header-actions">
-      <button class="map-btn" id="mapBtn">📍<span class="map-dot" id="mapDot"></span></button>
       <button class="gift-btn" id="giftBtn">🎁</button>
       <button class="rb-btn" id="rbBtn">🐂 RedBull</button>
       <button class="logout-btn" id="logoutBtn">🔒 Verrouiller</button>
@@ -201,10 +213,26 @@ h1 span{display:block;font-size:1.4rem;color:var(--mauve);}
 <div class="toast" id="toast"></div>
 <div class="msg-overlay" id="msgOverlay">
   <div class="msg-card">
-    <span class="msg-card-emoji" id="msgEmoji">🌸</span>
-    <div class="msg-card-date" id="msgDate"></div>
-    <div class="msg-card-text" id="msgText"></div>
-    <button class="msg-card-close" id="msgClose">Merci 💌</button>
+    <!-- Enveloppe animée -->
+    <div class="envelope-wrap" id="envelopeWrap">
+      <div class="envelope" id="envelope">
+        <div class="env-body"></div>
+        <div class="env-flap"></div>
+        <div class="env-bottom"></div>
+        <div class="env-left"></div>
+        <div class="env-right"></div>
+        <div class="env-letter">💌<br>Pour toi</div>
+        <div class="env-seal">💗</div>
+      </div>
+      <div class="env-hint" id="envHint">Appuie pour ouvrir ✨</div>
+    </div>
+    <!-- Contenu caché au début -->
+    <div class="msg-card-content" id="msgContent">
+      <span class="msg-card-emoji" id="msgEmoji">🌸</span>
+      <div class="msg-card-date" id="msgDate"></div>
+      <div class="msg-card-text" id="msgText"></div>
+      <button class="msg-card-close" id="msgClose">Merci 💌</button>
+    </div>
   </div>
 </div>
 
@@ -458,6 +486,7 @@ if(sessionStorage.getItem(SESSION_KEY)==='1'){
 ═══════════════════════════ */
 function loadApp(){
   document.getElementById('app').style.display='block';
+
   var s=document.createElement('script');
   s.type='module';
   s.textContent=`
@@ -524,11 +553,6 @@ window._rbSaveToFb=async function(txt){
   try{ await set(rbRef,txt); } catch(e){ console.warn('rb save err',e); }
 };
 
-/* Position GPS → Firebase */
-const posRef=ref(db,'position');
-window._updatePosition=async function(lat,lng){
-  try{ await set(posRef,{lat:lat,lng:lng,ts:Date.now()}); } catch(e){}
-};
 `;
   document.head.appendChild(s);
 }
@@ -917,8 +941,28 @@ document.getElementById('giftBtn').addEventListener('click', function(){
   document.getElementById('msgEmoji').textContent = msg.e;
   document.getElementById('msgText').textContent = msg.t;
   document.getElementById('msgDate').textContent = FR_DAYS_LONG[now.getDay()]+' '+now.getDate()+' '+FR_MONTHS_LONG[now.getMonth()];
+  /* Reset envelope state */
+  var env=document.getElementById('envelope');
+  var content=document.getElementById('msgContent');
+  var hint=document.getElementById('envHint');
+  env.classList.remove('open');
+  content.classList.remove('revealed');
+  hint.style.display='block';
   document.getElementById('msgOverlay').classList.add('open');
 });
+
+/* Clic sur enveloppe → s'ouvre + révèle le message */
+document.getElementById('envelopeWrap').addEventListener('click', function(){
+  var env=document.getElementById('envelope');
+  var msgContent=document.getElementById('msgContent');
+  var hint=document.getElementById('envHint');
+  if(!env.classList.contains('open')){
+    env.classList.add('open');
+    hint.style.display='none';
+    setTimeout(function(){ msgContent.classList.add('revealed'); }, 500);
+  }
+});
+
 document.getElementById('msgClose').addEventListener('click', function(){
   document.getElementById('msgOverlay').classList.remove('open');
 });
@@ -966,116 +1010,6 @@ function initRbCarnet(){
 
 window.addEventListener('DOMContentLoaded', function(){ initRbCarnet(); });
 
-/* ═══════════════════════════
-   GOOGLE MAPS + GPS TEMPS RÉEL
-═══════════════════════════ */
-var mapLoaded=false, gmap=null, marker=null, watchId=null;
-var mapOverlay=null, mapBtn=null, mapDot=null, mapStatus=null;
-
-function initMapUI(){
-  mapOverlay=document.getElementById('mapOverlay');
-  mapBtn=document.getElementById('mapBtn');
-  mapDot=document.getElementById('mapDot');
-  mapStatus=document.getElementById('mapStatus');
-  if(!mapBtn||!mapOverlay) return;
-
-function loadGoogleMaps(){
-  if(mapLoaded) return;
-  mapLoaded=true;
-  var s=document.createElement('script');
-  s.src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBQ4_slfyXAn1hqvt4xSxIXUHbAy66SC4s&callback=initMap';
-  s.async=true; s.defer=true;
-  document.head.appendChild(s);
-}
-
-window.initMap=function(){
-  var defaultPos={lat:48.8566, lng:2.3522};
-  gmap=new google.maps.Map(document.getElementById('gmap'),{
-    center:defaultPos, zoom:14,
-    mapTypeId:'roadmap',
-    disableDefaultUI:false,
-    zoomControl:true,
-    streetViewControl:false,
-    fullscreenControl:false,
-    styles:[
-      {featureType:'water',elementType:'geometry',stylers:[{color:'#e9e9e9'}]},
-      {featureType:'landscape',stylers:[{color:'#f2f2f2'}]},
-      {featureType:'road',elementType:'geometry',stylers:[{color:'#ffffff'}]},
-      {featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#e8758a',weight:0.5}]},
-      {featureType:'poi',stylers:[{visibility:'off'}]},
-      {featureType:'transit',stylers:[{visibility:'off'}]}
-    ]
-  });
-
-  marker=new google.maps.Marker({
-    map:gmap,
-    title:'Je suis ici 💌',
-    icon:{
-      path:google.maps.SymbolPath.CIRCLE,
-      scale:12,
-      fillColor:'#e8758a',
-      fillOpacity:1,
-      strokeColor:'white',
-      strokeWeight:3
-    }
-  });
-
-  /* Info window */
-  var iw=new google.maps.InfoWindow({content:'<div style="font-family:serif;color:#e8758a;font-weight:bold">Je suis ici 💌</div>'});
-  marker.addListener('click',function(){ iw.open(gmap,marker); });
-
-  startGPS();
-};
-
-function startGPS(){
-  if(!navigator.geolocation){
-    if(mapStatus) mapStatus.textContent='GPS non disponible sur cet appareil';
-    return;
-  }
-  if(mapStatus) mapStatus.textContent='Recherche du signal GPS…';
-  watchId=navigator.geolocation.watchPosition(
-    function(pos){
-      var lat=pos.coords.latitude, lng=pos.coords.longitude;
-      var acc=Math.round(pos.coords.accuracy);
-      var latlng={lat:lat,lng:lng};
-      marker.setPosition(latlng);
-      gmap.panTo(latlng);
-      if(mapStatus) mapStatus.textContent='En direct — précision ~'+acc+'m';
-      if(mapDot) mapDot.classList.add('active');
-      /* Envoyer à Firebase */
-      if(window._updatePosition) window._updatePosition(lat,lng);
-    },
-    function(err){
-      if(mapStatus) mapStatus.textContent='Erreur GPS: '+err.message;
-    },
-    {enableHighAccuracy:true, maximumAge:5000, timeout:10000}
-  );
-}
-
-  mapBtn.addEventListener('click',function(){
-    mapOverlay.classList.add('open');
-    loadGoogleMaps();
-  });
-  document.getElementById('mapClose').addEventListener('click',function(){
-    mapOverlay.classList.remove('open');
-  });
-  mapOverlay.addEventListener('click',function(e){
-    if(e.target===this) this.classList.remove('open');
-  });
-}
-window.addEventListener('DOMContentLoaded', function(){ initMapUI(); });
 </script>
-
-<div class="map-overlay" id="mapOverlay">
-  <div class="map-header">
-    <div>
-      <div class="map-title">📍 Ma position en direct</div>
-      <div class="map-status" id="mapStatus">Localisation en cours…</div>
-    </div>
-    <button class="map-close" id="mapClose">✕ Fermer</button>
-  </div>
-  <div id="gmap"></div>
-  <div class="map-info">Position mise à jour en temps réel 🔄</div>
-</div>
 </body>
 </html>
