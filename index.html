@@ -402,6 +402,8 @@ window._fbStatutSave=async function(statut,ts){
 window._fbStatutListen=function(cb){
   onValue(ref(db,'statut'),function(s){cb(s.val());});
 };
+/* Déclencher initStatut si déjà initialisé */
+if(window._onStatutReady) window._onStatutReady();
 
 /* RB FIREBASE */
 const rbRef=ref(db,'redbull_carnet');
@@ -853,11 +855,15 @@ function initStatut(){
     }
   }
 
-  /* Lire depuis Firebase en temps réel */
-  if(window._fbStatutListen) window._fbStatutListen(function(data){
-    if(data) applyStatus(data.statut, data.ts);
-    else applyStatus('inconnu');
-  });
+  /* Enregistre le callback — sera appelé par Firebase quand prêt */
+  window._onStatutReady=function(){
+    if(window._fbStatutListen) window._fbStatutListen(function(data){
+      if(data) applyStatus(data.statut, data.ts);
+      else applyStatus('inconnu');
+    });
+  };
+  /* Si Firebase déjà prêt, appel immédiat */
+  if(window._fbStatutListen) window._onStatutReady();
 
   /* Boutons */
   btns.forEach(function(btn){
